@@ -28,17 +28,9 @@ PRs for rounding out issues and improving the plugin are welcome.
 Run:
 npx cap sync ios
 
-## Android (thanks @lbesiche)
+## Android
 
-After you install the plugin, locate your MainActivity.java (can be found in /android/app/src/main/java/path/to/my/app/MainActivity.java)
-
-import this path:
-import com.ingageco.capacitormusiccontrols.CapacitorMusicControls;
-
-add class inside bridge activity:
-add(CapacitorMusicControls.class);
-
-Finally, run:
+Run:
 npx cap sync android
 
 
@@ -184,11 +176,8 @@ function handleControlsEvent(action) {
 ## credits & contributions
 
 Original plugin by:
-homerours (https://github.com/homerours)
+wako-app (https://github.com/wako-app/)
 
 Documentation influenced by:
-ghenry22 (https://github.com/ghenry22)
-ghenry22 successor to Cordova Music Controls (https://github.com/ghenry22/cordova-plugin-music-controls2/)
+wako-app successor to Cordova Music Controls (https://github.com/wako-app/capacitor-music-controls-plugin/)
 
-Special thanks to some forks with changes: 
-trabdin (https://github.com/trabdin)
