@@ -5,7 +5,7 @@ An update to Cordova Music Controls plugin to support Capacitor 3
 Music controls for Capacitor applications. Display a 'media' notification with play/pause, previous, next buttons, allowing the user to control the play. Handles headset events (plug, unplug, headset button) on Android.
 
 This plugin is forked from the original Cordova plugin which is no longer maintained but which can be found at:
-https://github.com/homerours/cordova-music-controls-plugin
+https://github.com/wako-app/capacitor-music-controls-plugin/
 
 ##  work in progress
 
@@ -21,7 +21,7 @@ PRs for rounding out issues and improving the plugin are welcome.
 ## Installation
 
 - Current release
-`npm install capacitor-music-controls-plugin`
+`npm install capacitor-v3-music-controls`
 
 ## iOS
 
@@ -47,8 +47,7 @@ npx cap sync android
 At the top of your file import Capacitor Plugins and this extract this plugin
 
 ```javascript
-import { Plugins } from '@capacitor/core';
-const { CapacitorMusicControls } = Plugins;
+import { CapacitorMusicControls } from 'capacitor-v3-music-controls';
 ```
 
 ## Methods
