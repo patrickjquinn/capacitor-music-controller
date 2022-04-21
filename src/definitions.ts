@@ -53,7 +53,7 @@ export interface CapacitorMusicControlsPlugin {
      * Toggle play/pause:
      * @param isPlaying {boolean}
      */
-    updateIsPlaying(isPlaying: boolean): void;
+    updateIsPlaying(isPlaying: boolean): Promise<void>;
 
     /**
      * Update elapsed time, optionally toggle play/pause:

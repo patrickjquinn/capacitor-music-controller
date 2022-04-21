@@ -108,10 +108,6 @@ public class CapacitorMusicControls extends Plugin {
 			call.reject("error in initializing MusicControlsInfos "+e.toString());
 
 		}
-
-
-
-
     }
 
 
@@ -237,9 +233,6 @@ public class CapacitorMusicControls extends Plugin {
 			e.printStackTrace();
 			call.reject("error in updateIsPlaying");
 		}
-
-
-
 	}
 
 	@PluginMethod()

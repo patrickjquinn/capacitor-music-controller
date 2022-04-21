@@ -1,6 +1,6 @@
 import { WebPlugin } from '@capacitor/core';
 
-import { CapacitorMusicControlsInfo, CapacitorMusicControlsPlugin } from ".";
+import { CapacitorMusicControlsInfo, CapacitorMusicControlsPlugin } from "./definitions";
 
 export class CapacitorMusicControlsWeb extends WebPlugin implements CapacitorMusicControlsPlugin {
     constructor() {
@@ -27,8 +27,9 @@ export class CapacitorMusicControlsWeb extends WebPlugin implements CapacitorMus
         console.log('updateElapsed', args);
     }
 
-    updateIsPlaying(isPlaying: boolean): void {
+    updateIsPlaying(isPlaying: boolean): Promise<void> {
         console.log('updateIsPlaying', isPlaying);
+        return Promise.resolve();
     }
 
 }

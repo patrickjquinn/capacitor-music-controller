@@ -3,8 +3,8 @@ This application makes use of the following third party libraries:
 
 ## Capacitor
 
-Copyright 2015-present Drifty Co.
-http://drifty.com/
+Copyright 2017-present Ionic
+https://ionic.io
 
 MIT License
 
@@ -30,8 +30,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ## CapacitorCordova
 
-Copyright 2015-present Drifty Co.
-http://drifty.com/
+Copyright 2017-present Ionic
+https://ionic.io
 
 MIT License
 
