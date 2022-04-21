@@ -110,8 +110,6 @@ public class CapacitorMusicControls extends Plugin {
 		}
     }
 
-
-
 	public void initialize() {
 
 		final Activity activity=getActivity();
@@ -175,8 +173,6 @@ public class CapacitorMusicControls extends Plugin {
 		mConnection = newMConnection;
 	}
 
-
-
 	@PluginMethod()
 	public void destroy(PluginCall call) {
 
@@ -208,16 +204,12 @@ public class CapacitorMusicControls extends Plugin {
 	}
 
 
-
-
-
 	@PluginMethod()
 	public void updateIsPlaying(PluginCall call) {
-		JSObject params = call.getData();
+		JSObject options = call.getData();
 
-		// final JSONObject params = args.getJSONObject(0);
 		try{
-			final boolean isPlaying = params.getBoolean("isPlaying");
+			final boolean isPlaying = options.getBoolean("isPlaying");
 			this.notification.updateIsPlaying(isPlaying);
 
 			if(isPlaying)
@@ -265,22 +257,16 @@ public class CapacitorMusicControls extends Plugin {
 		try{
 			final boolean dismissable = params.getBoolean("dismissable");
 			this.notification.updateDismissable(dismissable);
-		call.resolve();
+			call.resolve();
 		} catch(JSONException e){
 			call.reject("error in updateDismissable");
 		}
 
 	}
 
-
-
-
 	public void controlsNotification(JSObject ret){
-
 		Log.i(TAG, "controlsNotification fired "  + ret.getString("message"));
-
 		notifyListeners("controlsNotification", ret);
-
     }
 
 
