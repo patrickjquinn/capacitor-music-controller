@@ -1,5 +1,5 @@
 {
-  "name": "capacitor-v3-music-controls",
+  "name": "capacitor-music-controller",
   "version": "1.0.4",
   "description": "Implementation of MusicControls for Capacitor v3  projects",
   "main": "dist/esm/index.js",
@@ -10,22 +10,22 @@
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
   },
-  "author": "Alexitowy",
+  "author": "patrickjquinn",
   "license": "MIT",
   "dependencies": {
-    "@capacitor/core": "3.0.0"
+    "@capacitor/core": "3.5.1"
   },
   "devDependencies": {
-    "typescript": "^4.3.2",
-    "@capacitor/android": "^3.0.0",
-    "@capacitor/cli": "^3.0.0",
-    "@capacitor/ios": "^3.0.0"
+    "typescript": "^4.7.2",
+    "@capacitor/android": "^3.5.1",
+    "@capacitor/cli": "^3.5.1",
+    "@capacitor/ios": "^3.5.1"
   },
   "files": [
     "dist/",
     "ios/",
     "android/",
-    "CapacitorV3MusicControls.podspec"
+    "CapacitorMusicController.podspec"
   ],
   "keywords": [
     "capacitor",
@@ -42,9 +42,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alexitowy/capacitor-v3-music-controls"
+    "url": "https://github.com/patrickjquinn/capacitor-music-controller"
   },
   "bugs": {
-    "url": "https://github.com/alexitowy/capacitor-v3-music-controls/issues"
+    "url": "https://github.com/patrickjquinn/capacitor-music-controller/issues"
   }
 }

@@ -1,6 +1,6 @@
 
   Pod::Spec.new do |s|
-    s.name = 'CapacitorV3MusicControls'
+    s.name = 'CapacitorMusicController'
     s.version = '1.0.1'
     s.summary = 'Implementation of MusicControls for Capacitor projects'
     s.license = 'MIT'
