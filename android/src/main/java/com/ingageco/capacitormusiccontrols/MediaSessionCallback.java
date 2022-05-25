@@ -90,7 +90,7 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
     if (event.getAction() == KeyEvent.ACTION_DOWN) {
       final int keyCode = event.getKeyCode();
-      system.out.println("KeyEvent.ACTION_DOWN: " + keyCode);
+      System.out.println("KeyEvent.ACTION_DOWN: " + keyCode);
       switch (keyCode) {
         case KeyEvent.KEYCODE_MEDIA_PAUSE:
 
