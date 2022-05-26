@@ -123,28 +123,28 @@ public class CMCNotifyKiller extends Service {
 	* Stop background mode.
 	*/
 	private void sleepWell(boolean do_wakelock) {
-		Log.i(TAG, "Stopping WakeLock");
-		if (foregroundStarted) {
-			Log.i(TAG, "Stopping ForegroundService");
-			stopForeground(true);
-			foregroundStarted = false;
-			Log.i(TAG, "ForegroundService stopped");
-		}
-		mNM.cancel(NOTIFICATION_ID);
-
-		if (wakeLock != null && do_wakelock) {
-			if (wakeLock.isHeld()) {
-				try {
-					wakeLock.release();
-					Log.i(TAG, "wakeLock released");
-				} catch (Exception e) {
-					Log.e(TAG, e.getMessage());
-				}
-			} else {
-				Log.i(TAG, "wakeLock not held");
-			}
-			wakeLock = null;
-		}
+//		Log.i(TAG, "Stopping WakeLock");
+//		if (foregroundStarted) {
+//			Log.i(TAG, "Stopping ForegroundService");
+//			stopForeground(true);
+//			foregroundStarted = false;
+//			Log.i(TAG, "ForegroundService stopped");
+//		}
+//		mNM.cancel(NOTIFICATION_ID);
+//
+//		if (wakeLock != null && do_wakelock) {
+//			if (wakeLock.isHeld()) {
+//				try {
+//					wakeLock.release();
+//					Log.i(TAG, "wakeLock released");
+//				} catch (Exception e) {
+//					Log.e(TAG, e.getMessage());
+//				}
+//			} else {
+//				Log.i(TAG, "wakeLock not held");
+//			}
+//			wakeLock = null;
+//		}
 	}
 
 	@Override

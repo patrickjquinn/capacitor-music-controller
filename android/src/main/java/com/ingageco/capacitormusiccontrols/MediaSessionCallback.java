@@ -27,11 +27,6 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     JSObject ret = new JSObject();
     ret.put("message", "music-controls-media-button-play");
     this.musicControls.controlsNotification(ret);
-
-/*   if(this.cb != null) {
-     this.cb.success("{\"message\": \"music-controls-media-button-play\"}");
-     this.cb = null;
-   }*/
   }
 
   @Override
@@ -41,11 +36,6 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     JSObject ret = new JSObject();
     ret.put("message", "music-controls-media-button-pause");
     this.musicControls.controlsNotification(ret);
-
-/*   if(this.cb != null) {
-     this.cb.success("{\"message\": \"music-controls-media-button-pause\"}");
-     this.cb = null;
-   }*/
   }
 
   @Override
@@ -55,10 +45,6 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     JSObject ret = new JSObject();
     ret.put("message", "music-controls-media-button-next");
     this.musicControls.controlsNotification(ret);
-/*   if(this.cb != null) {
-     this.cb.success("{\"message\": \"music-controls-media-button-next\"}");
-     this.cb = null;
-   }*/
   }
 
   @Override
@@ -68,10 +54,6 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     JSObject ret = new JSObject();
     ret.put("message", "music-controls-media-button-previous");
     this.musicControls.controlsNotification(ret);
-/*   if(this.cb != null) {
-     this.cb.success("{\"message\": \"music-controls-media-button-previous\"}");
-     this.cb = null;
-   }*/
   }
 
   @Override
@@ -85,101 +67,66 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     JSObject ret = new JSObject();
 
     if (event == null) {
+      System.out.println("Keycode is null");
       return super.onMediaButtonEvent(mediaButtonIntent);
     }
 
     if (event.getAction() == KeyEvent.ACTION_DOWN) {
       final int keyCode = event.getKeyCode();
-      System.out.println("KeyEvent.ACTION_DOWN: " + keyCode);
       switch (keyCode) {
         case KeyEvent.KEYCODE_MEDIA_PAUSE:
 
           ret.put("message", "music-controls-media-button-pause");
           this.musicControls.controlsNotification(ret);
 
-//         if(this.cb != null) {
-//           this.cb.success("{\"message\": \"music-controls-media-button-pause\"}");
-//           this.cb = null;
-//         }
           break;
         case KeyEvent.KEYCODE_MEDIA_PLAY:
 
           ret.put("message", "music-controls-media-button-play");
           this.musicControls.controlsNotification(ret);
 
-         /*if(this.cb != null) {
-           this.cb.success("{\"message\": \"music-controls-media-button-play\"}");
-           this.cb = null;
-         }*/
           break;
         case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
 
           ret.put("message", "music-controls-media-button-previous");
           this.musicControls.controlsNotification(ret);
 
-         /*if(this.cb != null) {
-           this.cb.success("{\"message\": \"music-controls-media-button-previous\"}");
-           this.cb = null;
-         }*/
           break;
         case KeyEvent.KEYCODE_MEDIA_NEXT:
 
           ret.put("message", "music-controls-media-button-next");
           this.musicControls.controlsNotification(ret);
 
-         /*if(this.cb != null) {
-           this.cb.success("{\"message\": \"music-controls-media-button-next\"}");
-           this.cb = null;
-         }*/
           break;
         case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
 
           ret.put("message", "music-controls-media-button-play-pause");
           this.musicControls.controlsNotification(ret);
 
-         /*if(this.cb != null) {
-           this.cb.success("{\"message\": \"music-controls-media-button-play-pause\"}");
-           this.cb = null;
-         }*/
           break;
         case KeyEvent.KEYCODE_MEDIA_STOP:
 
           ret.put("message", "music-controls-media-button-stop");
           this.musicControls.controlsNotification(ret);
 
-         /*if(this.cb != null) {
-           this.cb.success("{\"message\": \"music-controls-media-button-stop\"}");
-           this.cb = null;
-         }*/
           break;
         case KeyEvent.KEYCODE_MEDIA_FAST_FORWARD:
 
           ret.put("message", "music-controls-media-button-forward");
           this.musicControls.controlsNotification(ret);
 
-         /*if(this.cb != null) {
-           this.cb.success("{\"message\": \"music-controls-media-button-forward\"}");
-           this.cb = null;
-         }*/
           break;
         case KeyEvent.KEYCODE_MEDIA_REWIND:
 
           ret.put("message", "music-controls-media-button-rewind");
           this.musicControls.controlsNotification(ret);
 
-         /*if(this.cb != null) {
-           this.cb.success("{\"message\": \"music-controls-media-button-rewind\"}");
-           this.cb = null;
-         }*/
           break;
         default:
 
           ret.put("message", "music-controls-media-button-unknown-" + keyCode);
           this.musicControls.controlsNotification(ret);
-         /*if(this.cb != null) {
-           this.cb.success("{\"message\": \"music-controls-media-button-unknown-" + keyCode + "\"}");
-           this.cb = null;
-         }*/
+
           return super.onMediaButtonEvent(mediaButtonIntent);
       }
     }
