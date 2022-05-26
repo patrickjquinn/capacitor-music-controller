@@ -241,11 +241,12 @@ public class CapacitorMusicControls extends Plugin {
 			final boolean isPlaying = options.getBoolean("isPlaying");
 			this.notification.updateIsPlaying(isPlaying);
 
-			if(isPlaying)
+			if(isPlaying) {
+				this.askForAudioFocus();
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
-			else
+			}else {
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
-			this.askForAudioFocus();
+			}
 			call.resolve();
 		} catch(JSONException e){
 			System.out.println("toString(): "  + e.toString());
@@ -265,11 +266,12 @@ public class CapacitorMusicControls extends Plugin {
 			final boolean isPlaying = params.getBoolean("isPlaying");
 			this.notification.updateIsPlaying(isPlaying);
 
-			if(isPlaying)
+			if(isPlaying) {
+				this.askForAudioFocus();
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
-			else
+			} else {
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
-			this.askForAudioFocus();
+			}
 			call.resolve();
 		} catch(JSONException e){
 			call.reject("error in updateElapsed");
