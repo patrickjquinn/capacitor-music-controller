@@ -17,8 +17,6 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     this.musicControls=musicControls;
   }
 
-
-
   @Override
   public void onPlay() {
     super.onPlay();
@@ -63,11 +61,10 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
   @Override
   public boolean onMediaButtonEvent(Intent mediaButtonIntent) {
-    final KeyEvent event = (KeyEvent) mediaButtonIntent.getExtras().get(Intent.EXTRA_KEY_EVENT);
+    final KeyEvent event = (KeyEvent) mediaButtonIntent.getParcelableExtra(Intent.EXTRA_KEY_EVENT);
     JSObject ret = new JSObject();
 
     if (event == null) {
-      System.out.println("Keycode is null");
       return super.onMediaButtonEvent(mediaButtonIntent);
     }
 

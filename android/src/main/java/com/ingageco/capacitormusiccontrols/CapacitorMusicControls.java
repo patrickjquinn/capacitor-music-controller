@@ -1,38 +1,29 @@
 package com.ingageco.capacitormusiccontrols;
 
-import com.ingageco.capacitormusiccontrols.capacitormusiccontrolsplugin.R;
-import com.getcapacitor.JSObject;
-import com.getcapacitor.annotation.CapacitorPlugin;
-import com.getcapacitor.Plugin;
-import com.getcapacitor.PluginCall;
-import com.getcapacitor.PluginMethod;
-
+import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.ComponentName;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.AudioAttributes;
-import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.IBinder;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-
-import android.app.Activity;
-import android.os.SystemClock;
-
-import android.content.Context;
-import android.content.IntentFilter;
-import android.content.Intent;
-import android.app.PendingIntent;
 import android.util.Log;
 
-
-import androidx.annotation.RequiresApi;
+import com.getcapacitor.JSObject;
+import com.getcapacitor.Plugin;
+import com.getcapacitor.PluginCall;
+import com.getcapacitor.PluginMethod;
+import com.getcapacitor.annotation.CapacitorPlugin;
+import com.ingageco.capacitormusiccontrols.capacitormusiccontrolsplugin.R;
 
 import org.json.JSONException;
 
@@ -121,7 +112,6 @@ public class CapacitorMusicControls extends Plugin {
 			if(art != null){
 				metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, art);
 				metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, art);
-
 			}
 
 			mediaSessionCompat.setMetadata(metadataBuilder.build());
@@ -132,7 +122,6 @@ public class CapacitorMusicControls extends Plugin {
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
 
 			call.resolve();
-
 		}catch(JSONException e){
 			call.reject("error in initializing MusicControlsInfos "+e.toString());
 
@@ -141,9 +130,9 @@ public class CapacitorMusicControls extends Plugin {
 
 	public void initialize() {
 
-		final Activity activity=getActivity();
+		final Activity activity = getActivity();
 
-		final Context context=activity.getApplicationContext();
+		final Context context = activity.getApplicationContext();
 
 		notification = new MusicControlsNotification(activity, notificationID);
 
@@ -246,6 +235,7 @@ public class CapacitorMusicControls extends Plugin {
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
 			}else {
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
+				// this.askForAudioFocus();
 			}
 			call.resolve();
 		} catch(JSONException e){
