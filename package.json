@@ -1,11 +1,11 @@
 {
   "name": "capacitor-music-controller",
-  "version": "1.0.9",
-  "description": "Implementation of MusicControls for Capacitor v3  projects",
+  "version": "1.1.0",
+  "description": "Implementation of MusicControls for Capacitor v3 projects",
   "main": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
   "scripts": {
-    "build": "npm run clean && tsc",
+    "build": "npm run clean && tsc ",
     "clean": "rm -rf ./dist",
     "watch": "tsc --watch",
     "prepublishOnly": "npm run build"
@@ -13,13 +13,13 @@
   "author": "patrickjquinn",
   "license": "MIT",
   "dependencies": {
-    "@capacitor/core": "3.5.1"
+    "@capacitor/core": "3.6.0"
   },
   "devDependencies": {
-    "typescript": "^4.7.2",
-    "@capacitor/android": "^3.5.1",
-    "@capacitor/cli": "^3.5.1",
-    "@capacitor/ios": "^3.5.1"
+    "typescript": "^4.7.4",
+    "@capacitor/android": "^3.6.0",
+    "@capacitor/cli": "^3.6.0",
+    "@capacitor/ios": "^3.6.0"
   },
   "files": [
     "dist/",

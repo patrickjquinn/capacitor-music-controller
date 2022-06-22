@@ -297,6 +297,8 @@ public class CapacitorMusicControls extends Plugin {
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-pause"));
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-play"));
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-next"));
+		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-media-button-next"));
+		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-media-button-previous"));
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-media-button"));
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-destroy"));
 

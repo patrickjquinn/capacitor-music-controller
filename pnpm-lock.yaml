@@ -1,40 +1,40 @@
 lockfileVersion: 5.4
 
 specifiers:
-  '@capacitor/android': ^3.5.1
-  '@capacitor/cli': ^3.5.1
-  '@capacitor/core': 3.5.1
-  '@capacitor/ios': ^3.5.1
-  typescript: ^4.7.2
+  '@capacitor/android': ^3.6.0
+  '@capacitor/cli': ^3.6.0
+  '@capacitor/core': 3.6.0
+  '@capacitor/ios': ^3.6.0
+  typescript: ^4.7.4
 
 dependencies:
-  '@capacitor/core': 3.5.1
+  '@capacitor/core': 3.6.0
 
 devDependencies:
-  '@capacitor/android': 3.5.1_@capacitor+core@3.5.1
-  '@capacitor/cli': 3.5.1
-  '@capacitor/ios': 3.5.1_@capacitor+core@3.5.1
-  typescript: 4.7.2
+  '@capacitor/android': 3.6.0_@capacitor+core@3.6.0
+  '@capacitor/cli': 3.6.0
+  '@capacitor/ios': 3.6.0_@capacitor+core@3.6.0
+  typescript: 4.7.4
 
 packages:
 
-  /@capacitor/android/3.5.1_@capacitor+core@3.5.1:
-    resolution: {integrity: sha512-rjehS0+BQBlwoN8hUyrMuzexn/9QJsONb1kmN5uXcL8JuTEbv35fa7z0tSD4x1LKwUFd+3Zeuwt60QRuwijlmw==}
+  /@capacitor/android/3.6.0_@capacitor+core@3.6.0:
+    resolution: {integrity: sha512-X6n0OLy7BE3c6qfVuL7UYyq/aIwEsqIAqtyDOwMdj5k+P1rLQVsGaWERXUtC0BGeoKBD5YgbWiyKwAwg5Spjdg==}
     peerDependencies:
-      '@capacitor/core': ^3.5.0
+      '@capacitor/core': ^3.6.0
     dependencies:
-      '@capacitor/core': 3.5.1
+      '@capacitor/core': 3.6.0
     dev: true
 
-  /@capacitor/cli/3.5.1:
-    resolution: {integrity: sha512-zIA5BqT8ZnfUFEJwHlSdQ8Q5iWqmT7S6Mgsjbk55Pkv3BKQIP2VIFYpM4E7lGLEKd4kBnKStD0lTw5/P3E03KA==}
+  /@capacitor/cli/3.6.0:
+    resolution: {integrity: sha512-YNQNM1wvy3zJkKNWcNL5KzIqgV5J1YzO27MHSxZyVA6+XmWCZi8Qz/Cq/uDrepsuBG67QdIvtOeL+JnXARedfw==}
     engines: {node: '>=12.4.0'}
     hasBin: true
     dependencies:
-      '@ionic/cli-framework-output': 2.2.4
-      '@ionic/utils-fs': 3.1.5
-      '@ionic/utils-subprocess': 2.1.10
-      '@ionic/utils-terminal': 2.3.2
+      '@ionic/cli-framework-output': 2.2.5
+      '@ionic/utils-fs': 3.1.6
+      '@ionic/utils-subprocess': 2.1.11
+      '@ionic/utils-terminal': 2.3.3
       commander: 6.2.1
       debug: 4.3.4
       env-paths: 2.2.1
@@ -51,24 +51,24 @@ packages:
       - supports-color
     dev: true
 
-  /@capacitor/core/3.5.1:
-    resolution: {integrity: sha512-UTROxB7q/hZBnhDLcCN7mVsAX3SxXNMhVuPbtddsDOUCm4hExLXN62gPD7rjgmumhfHMjeXmkw/EfRzSjttL1g==}
+  /@capacitor/core/3.6.0:
+    resolution: {integrity: sha512-F94ozABHXxq1xMcNGMnOVP73WZDWYR1PrJEfVfl9Ja0BXGEJURIxmHBc842OX3rrt3+g0ELHyhX9LTH16eeonw==}
     dependencies:
       tslib: 2.4.0
 
-  /@capacitor/ios/3.5.1_@capacitor+core@3.5.1:
-    resolution: {integrity: sha512-295L9dHe/QaejUpGI8Pxwb1i2yVgick1ExIDK26xk+tk1km3B1HVjsIS8qkf2SOp7tuwP9+W5T5p7rLMNN4v5g==}
+  /@capacitor/ios/3.6.0_@capacitor+core@3.6.0:
+    resolution: {integrity: sha512-clauOkPj24COpAi1eIHSgi4OENIwuI8P6WKkfn3HVRX2lUPWyxczHTtg64inwECABy3zJdxnnwBHeok3bpoSCg==}
     peerDependencies:
-      '@capacitor/core': ^3.5.0
+      '@capacitor/core': ^3.6.0
     dependencies:
-      '@capacitor/core': 3.5.1
+      '@capacitor/core': 3.6.0
     dev: true
 
-  /@ionic/cli-framework-output/2.2.4:
-    resolution: {integrity: sha512-YdaXtHHg0zT1JSFlGrbTWe6uzD6u+w5yHE+aM7Js/3BNLYKIYngliMoojGxwNHbqMPNuvDzWMDAbxteY5u0vKg==}
+  /@ionic/cli-framework-output/2.2.5:
+    resolution: {integrity: sha512-YeDLTnTaE6V4IDUxT8GDIep0GuRIFaR7YZDLANMuuWJZDmnTku6DP+MmQoltBeLmVvz1BAAZgk41xzxdq6H2FQ==}
     engines: {node: '>=10.3.0'}
     dependencies:
-      '@ionic/utils-terminal': 2.3.2
+      '@ionic/utils-terminal': 2.3.3
       debug: 4.3.4
       tslib: 2.4.0
     transitivePeerDependencies:
@@ -85,10 +85,11 @@ packages:
       - supports-color
     dev: true
 
-  /@ionic/utils-fs/3.1.5:
-    resolution: {integrity: sha512-a41bY2dHqWSEQQ/80CpbXSs8McyiCFf2DnIWWLukrhYWf46h4qi6M/8dxcMKrofRiqI/3F+cL3S2mOm9Zz/o2Q==}
+  /@ionic/utils-fs/3.1.6:
+    resolution: {integrity: sha512-eikrNkK89CfGPmexjTfSWl4EYqsPSBh0Ka7by4F0PLc1hJZYtJxUZV3X4r5ecA8ikjicUmcbU7zJmAjmqutG/w==}
     engines: {node: '>=10.3.0'}
     dependencies:
+      '@types/fs-extra': 8.1.2
       debug: 4.3.4
       fs-extra: 9.1.0
       tslib: 2.4.0
@@ -106,12 +107,12 @@ packages:
       - supports-color
     dev: true
 
-  /@ionic/utils-process/2.1.9:
-    resolution: {integrity: sha512-+RD2mcwh7jtAtkvCFw1BBnUHg/UYgBiYxpXPuXUBSitHHAgVk1zDfYBTM31EKU5FGb5nVU/HkjeYGRHEmj4MPA==}
+  /@ionic/utils-process/2.1.10:
+    resolution: {integrity: sha512-mZ7JEowcuGQK+SKsJXi0liYTcXd2bNMR3nE0CyTROpMECUpJeAvvaBaPGZf5ERQUPeWBVuwqAqjUmIdxhz5bxw==}
     engines: {node: '>=10.3.0'}
     dependencies:
       '@ionic/utils-object': 2.1.5
-      '@ionic/utils-terminal': 2.3.2
+      '@ionic/utils-terminal': 2.3.3
       debug: 4.3.4
       signal-exit: 3.0.7
       tree-kill: 1.2.2
@@ -130,15 +131,15 @@ packages:
       - supports-color
     dev: true
 
-  /@ionic/utils-subprocess/2.1.10:
-    resolution: {integrity: sha512-X5wXiA4moEzbvchWqa7kwnYw3IqFyP1otlN/APFOmzmpsQWdyz5LRqqMhPozJeN11Mi3pwNR+BCQWd6vFBHTTg==}
+  /@ionic/utils-subprocess/2.1.11:
+    resolution: {integrity: sha512-6zCDixNmZCbMCy5np8klSxOZF85kuDyzZSTTQKQP90ZtYNCcPYmuFSzaqDwApJT4r5L3MY3JrqK1gLkc6xiUPw==}
     engines: {node: '>=10.3.0'}
     dependencies:
       '@ionic/utils-array': 2.1.5
-      '@ionic/utils-fs': 3.1.5
-      '@ionic/utils-process': 2.1.9
+      '@ionic/utils-fs': 3.1.6
+      '@ionic/utils-process': 2.1.10
       '@ionic/utils-stream': 3.1.5
-      '@ionic/utils-terminal': 2.3.2
+      '@ionic/utils-terminal': 2.3.3
       cross-spawn: 7.0.3
       debug: 4.3.4
       tslib: 2.4.0
@@ -146,10 +147,11 @@ packages:
       - supports-color
     dev: true
 
-  /@ionic/utils-terminal/2.3.2:
-    resolution: {integrity: sha512-/yNrEZEDsjzTkpDWTsBjZeWJj2AkMwidyL72kqGkIDGt+J4sL/YVsA9CE3P9P1FAEm8jJmTy/EYAhC6EwA9f1A==}
+  /@ionic/utils-terminal/2.3.3:
+    resolution: {integrity: sha512-RnuSfNZ5fLEyX3R5mtcMY97cGD1A0NVBbarsSQ6yMMfRJ5YHU7hHVyUfvZeClbqkBC/pAqI/rYJuXKCT9YeMCQ==}
     engines: {node: '>=10.3.0'}
     dependencies:
+      '@types/slice-ansi': 4.0.0
       debug: 4.3.4
       signal-exit: 3.0.7
       slice-ansi: 4.0.0
@@ -160,6 +162,20 @@ packages:
       wrap-ansi: 7.0.0
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@types/fs-extra/8.1.2:
+    resolution: {integrity: sha512-SvSrYXfWSc7R4eqnOzbQF4TZmfpNSM9FrSWLU3EUnWBuyZqNBOrv1B1JA3byUDPUl9z4Ab3jeZG2eDdySlgNMg==}
+    dependencies:
+      '@types/node': 18.0.0
+    dev: true
+
+  /@types/node/18.0.0:
+    resolution: {integrity: sha512-cHlGmko4gWLVI27cGJntjs/Sj8th9aYwplmZFwmmgYQQvL5NUsgVJG7OddLvNfLqYS31KFN0s3qlaD9qCaxACA==}
+    dev: true
+
+  /@types/slice-ansi/4.0.0:
+    resolution: {integrity: sha512-+OpjSaq85gvlZAYINyzKpLeiFkSC4EsC6IIiT6v6TLSU5k5U83fHGj9Lel8oKEXM0HqgrMVCjXPDPVICtxF7EQ==}
     dev: true
 
   /ansi-regex/5.0.1:
@@ -247,7 +263,7 @@ packages:
     dev: true
 
   /elementtree/0.1.7:
-    resolution: {integrity: sha1-mskb5uUvtuYkTE5UpKw+2K6OKcA=}
+    resolution: {integrity: sha512-wkgGT6kugeQk/P6VZ/f4T+4HB41BVgNBq5CDIZVbQ02nvTVqAiVTbskxxu3eA/X96lMlfYOwnLQpN2v5E1zDEg==}
     engines: {node: '>= 0.4.0'}
     dependencies:
       sax: 1.1.4
@@ -263,7 +279,7 @@ packages:
     dev: true
 
   /fd-slicer/1.1.0:
-    resolution: {integrity: sha1-JcfInLH5B3+IkbvmHY85Dq4lbx4=}
+    resolution: {integrity: sha512-cE1qsB/VwyQozZ+q1dGxR8LBYNZeofhEdUNGSMbQD3Gw2lAzX9Zb3uIU6Ebc/Fmyjo9AWWfnn0AUCHqtevs/8g==}
     dependencies:
       pend: 1.2.0
     dev: true
@@ -282,7 +298,7 @@ packages:
     resolution: {integrity: sha512-V/JgOLFCS+R6Vcq0slCuaeWEdNC3ouDlJMNIsacH2VtALiu9mV4LPrHc5cDl8k5aw6J8jwgWWpiTo5RYhmIzvg==}
     engines: {node: '>= 8'}
     dependencies:
-      minipass: 3.1.6
+      minipass: 3.3.3
     dev: true
 
   /graceful-fs/4.2.10:
@@ -316,7 +332,7 @@ packages:
     dev: true
 
   /isexe/2.0.0:
-    resolution: {integrity: sha1-6PvzdNxVb/iUehDcsFctYz8s+hA=}
+    resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
 
   /jsonfile/6.1.0:
@@ -344,8 +360,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /minipass/3.1.6:
-    resolution: {integrity: sha512-rty5kpw9/z8SX9dmxblFA6edItUmwJgMeYDZRrwlIVN27i8gysGbznJwUggw2V/FVqFSDdWy040ZPS811DYAqQ==}
+  /minipass/3.3.3:
+    resolution: {integrity: sha512-N0BOsdFAlNRfmwMhjAsLVWOk7Ljmeb39iqFlsV1At+jqRhSUP9yeof8FyJu4imaJiSUp8vQebWD/guZwGQC8iA==}
     engines: {node: '>=8'}
     dependencies:
       yallist: 4.0.0
@@ -355,7 +371,7 @@ packages:
     resolution: {integrity: sha512-bAxsR8BVfj60DWXHE3u30oHzfl4G7khkSuPW+qvpd7jFRHm7dLxOjUk1EHACJ/hxLY8phGJ0YhYHZo7jil7Qdg==}
     engines: {node: '>= 8'}
     dependencies:
-      minipass: 3.1.6
+      minipass: 3.3.3
       yallist: 4.0.0
     dev: true
 
@@ -374,8 +390,8 @@ packages:
     engines: {node: '>=10.3.0'}
     hasBin: true
     dependencies:
-      '@ionic/utils-fs': 3.1.5
-      '@ionic/utils-terminal': 2.3.2
+      '@ionic/utils-fs': 3.1.6
+      '@ionic/utils-terminal': 2.3.3
       bplist-parser: 0.3.2
       debug: 4.3.4
       elementtree: 0.1.7
@@ -403,7 +419,7 @@ packages:
     dev: true
 
   /pend/1.2.0:
-    resolution: {integrity: sha1-elfrVQpng/kRUzH89GY9XI4AelA=}
+    resolution: {integrity: sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==}
     dev: true
 
   /plist/3.0.5:
@@ -436,7 +452,7 @@ packages:
     dev: true
 
   /sax/1.1.4:
-    resolution: {integrity: sha1-dLbTPJrh4AFRDxeakRaFiPGu2qk=}
+    resolution: {integrity: sha512-5f3k2PbGGp+YtKJjOItpg3P99IMD84E4HOvcfleTb5joCHNXYLsR9yWFPOYGgaeMPDubQILTCMdsFb2OMeOjtg==}
     dev: true
 
   /sax/1.2.4:
@@ -514,7 +530,7 @@ packages:
     dependencies:
       chownr: 2.0.0
       fs-minipass: 2.1.0
-      minipass: 3.1.6
+      minipass: 3.3.3
       minizlib: 2.1.2
       mkdirp: 1.0.4
       yallist: 4.0.0
@@ -534,8 +550,8 @@ packages:
   /tslib/2.4.0:
     resolution: {integrity: sha512-d6xOpEDfsi2CZVlPQzGeux8XMwLT9hssAsaPYExaQMuYskwb+x1x7J371tWlbBdWHroy99KnVB6qIkUbs5X3UQ==}
 
-  /typescript/4.7.2:
-    resolution: {integrity: sha512-Mamb1iX2FDUpcTRzltPxgWMKy3fhg0TN378ylbktPGPK/99KbDtMQ4W1hwgsbPAsG3a0xKa1vmw4VKZQbkvz5A==}
+  /typescript/4.7.4:
+    resolution: {integrity: sha512-C0WQT0gezHuw6AdY1M2jxUO83Rjf0HP7Sk1DtXj6j1EwkQNZrHAg2XPWlq62oqEhYvONq5pkC2Y9oPljWToLmQ==}
     engines: {node: '>=4.2.0'}
     hasBin: true
     dev: true
@@ -551,7 +567,7 @@ packages:
     dev: true
 
   /util-deprecate/1.0.2:
-    resolution: {integrity: sha1-RQ1Nyfpw3nMnYvvS1KKJgUGaDM8=}
+    resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
 
   /which/2.0.2:
@@ -585,7 +601,7 @@ packages:
     dev: true
 
   /xmlbuilder/9.0.7:
-    resolution: {integrity: sha1-Ey7mPS7FVlxVfiD0wi35rKaGsQ0=}
+    resolution: {integrity: sha512-7YXTQc3P2l9+0rjaUbLwMKRhtmwg1M1eDf6nag7urC7pIPYLD9W/jmzQ4ptRSUbodw5S0jfoGTflLemQibSpeQ==}
     engines: {node: '>=4.0'}
     dev: true
 
@@ -594,7 +610,7 @@ packages:
     dev: true
 
   /yauzl/2.10.0:
-    resolution: {integrity: sha1-x+sXyT4RLLEIb6bY5R+wZnt5pfk=}
+    resolution: {integrity: sha512-p4a9I6X6nu6IhoGmBqAcbJy1mlC4j27vEPZX9F4L4/vZT3Lyq1VkFHw/V/PUcB9Buo+DG3iHkT0x3Qya58zc3g==}
     dependencies:
       buffer-crc32: 0.2.13
       fd-slicer: 1.1.0
