@@ -301,6 +301,7 @@ public class CapacitorMusicControls extends Plugin {
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-media-button-previous"));
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-media-button"));
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-destroy"));
+		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-headset-unplugged"));
 
 		// Listen for headset plug/unplug
 		context.registerReceiver(mMessageReceiver, new IntentFilter(Intent.ACTION_HEADSET_PLUG));
