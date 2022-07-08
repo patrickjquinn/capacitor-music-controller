@@ -10,6 +10,7 @@ export interface CapacitorMusicControlsInfo {
     hasNext?: boolean;
     hasSkipForward?: boolean;
     hasSkipBackward?: boolean;
+    hasOptions?: boolean;
     skipForwardInterval?: number;
     skipBackwardInterval?: number;
     hasScrubbing?: boolean;

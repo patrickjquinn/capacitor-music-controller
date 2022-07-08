@@ -28,12 +28,15 @@ public class CapacitorMusicControls: CAPPlugin {
     
     var musicControlsInfo: CapacitorMusicControlsInfo!;
     var eventListnerActive = false;
+    var lastArtUrl = "";
+    var lastArtData: Data? = nil;
  
     @objc func create(_ call: CAPPluginCall) {
         let options: Dictionary = call.options;
 
         self.musicControlsInfo = CapacitorMusicControlsInfo(dictionary: options as NSDictionary);
         
+        self.setupControls();
         
         print("MusicControlsOptions:")
         for optionLine in options {
@@ -48,7 +51,7 @@ public class CapacitorMusicControls: CAPPlugin {
     
         let duration = self.musicControlsInfo.duration;
         let elapsed = self.musicControlsInfo.elapsed;
-        let playbackRate = self.musicControlsInfo.isPlaying;
+        let playbackRate = self.musicControlsInfo.isPlaying! ? 1.0 : 0.0;
 
         let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default();
 
@@ -101,15 +104,12 @@ public class CapacitorMusicControls: CAPPlugin {
     }
     
     @objc func updateElapsed(_ call: CAPPluginCall) {
-        
          self.updateIsPlaying(call);
-         
      }
     
     
     @objc func listen(_ call: CAPPluginCall) {
             self.registerMusicControlsEventListener();
-            
             call.resolve();
    }
        
@@ -127,34 +127,32 @@ public class CapacitorMusicControls: CAPPlugin {
         var coverImage: UIImage?;
         
         if (coverUri.hasPrefix("http://") || coverUri.hasPrefix("https://")) {
-            //print("Cover item is a URL");
-
-            let coverImageUrl = URL(string: coverUri)!;
-            
-            do{
-
-                let coverImageData = try Data(contentsOf: coverImageUrl);
-                coverImage = UIImage(data:coverImageData)!;
- 
-            } catch {
-               // print("Could not make image");
-                coverImage = nil;
+            if (lastArtUrl == coverUri && lastArtData != nil) {
+                let coverImageData = lastArtData
+                coverImage = UIImage(data:coverImageData!)!;
+            } else {
+                lastArtUrl = coverUri;
+                let coverImageUrl = URL(string: coverUri)!;
+                
+                do{
+                    let coverImageData = try Data(contentsOf: coverImageUrl);
+                    coverImage = UIImage(data:coverImageData)!;
+                    lastArtData = coverImageData
+     
+                } catch {
+                    lastArtUrl = "";
+                    lastArtData = nil;
+                    coverImage = nil;
+                }
             }
-        }
-        else if (coverUri.hasPrefix("file://")) {
-            //print("coverImage file://");
-
-            
+        } else if (coverUri.hasPrefix("file://")) {
             let fullCoverImagePath = coverUri.replacingOccurrences(of: "file://", with: "");
-            
             let defaultManager = FileManager.default;
             
             if(defaultManager.fileExists(atPath: fullCoverImagePath)){
                 coverImage = UIImage(contentsOfFile: fullCoverImagePath)!
             } else {
                 coverImage = nil;
-
-               // print("unable to find coverImage");
             }
  
         }
@@ -205,6 +203,16 @@ public class CapacitorMusicControls: CAPPlugin {
         self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-skip-to", "position" : event.positionTime ])
         return .success;
     }
+
+    @objc func likeEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-liked",])
+        return .success;
+    }
+
+     @objc func dislikeEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+        self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-dislike" ])
+        return .success;
+    }
     
     @objc func skipForwardEvent(_ event: MPSkipIntervalCommandEvent) -> MPRemoteCommandHandlerStatus{
         self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-skip-forward" ])
@@ -214,7 +222,6 @@ public class CapacitorMusicControls: CAPPlugin {
     @objc func skipBackwardEvent(_ event: MPSkipIntervalCommandEvent) -> MPRemoteCommandHandlerStatus{
         self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-skip-backward" ])
         return .success;
-
     }
     
     @objc func nextTrackEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
@@ -237,15 +244,7 @@ public class CapacitorMusicControls: CAPPlugin {
         return .success;
     }
     
-    
-    func registerMusicControlsEventListener(){
-        
-        self.eventListnerActive = true;
-
-        DispatchQueue.main.async {
-            UIApplication.shared.beginReceivingRemoteControlEvents();
-        }
-        
+    func setupControls() {
         let commandCenter = MPRemoteCommandCenter.shared();
            
         commandCenter.playCommand.isEnabled = true;
@@ -279,6 +278,25 @@ public class CapacitorMusicControls: CAPPlugin {
             commandCenter.changePlaybackPositionCommand.isEnabled = true;
             commandCenter.changePlaybackPositionCommand.addTarget(self, action: #selector(CapacitorMusicControls.changedThumbSliderOnLockScreen(_:)));
         }
+
+        if(self.musicControlsInfo.hasOptions == true){
+            commandCenter.likeCommand.isEnabled = true;
+            commandCenter.likeCommand.addTarget(self, action: #selector(CapacitorMusicControls.likeEvent(_:)));
+            commandCenter.dislikeCommand.isEnabled = true;
+            commandCenter.dislikeCommand.addTarget(self, action: #selector(CapacitorMusicControls.dislikeEvent(_:)));
+        }
+    }
+    
+    
+    func registerMusicControlsEventListener(){
+        
+        self.eventListnerActive = true;
+
+        DispatchQueue.main.async {
+            UIApplication.shared.beginReceivingRemoteControlEvents();
+        }
+        
+        self.setupControls();
     }
     
     func deregisterMusicControlsEventListener(){

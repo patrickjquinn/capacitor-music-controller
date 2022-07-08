@@ -61,6 +61,7 @@ CapacitorMusicControls.create({
 	elapsed : 10, // optional, default: 0
   	hasSkipForward : true, //optional, default: false. true value overrides hasNext.
   	hasSkipBackward : true, //optional, default: false. true value overrides hasPrev.
+	hasOptions: true,
   	skipForwardInterval : 15, //optional. default: 15.
 	skipBackwardInterval : 15, //optional. default: 15.
 	hasScrubbing : false, //optional. default to false. Enable scrubbing from control center progress bar 

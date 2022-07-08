@@ -15,11 +15,12 @@ public class CapacitorMusicControlsInfo: NSObject {
     var duration: NSNumber? = 0;
     var elapsed: NSNumber? = 0;
     var isPlaying: Bool? = true;
-    var hasPrev: Bool? = true;
+    var hasPrev: Bool? = false;
     var hasNext: Bool? = true;
     var hasSkipForward: Bool? = false;
     var hasSkipBackward: Bool? = false;
-    var hasScrubbing: Bool? = false;
+    var hasScrubbing: Bool? = true;
+    var hasOptions: Bool? = true
     var skipForwardInterval: NSNumber? = 0;
     var skipBackwardInterval: NSNumber? = 0;
     var dismissable: Bool? = true;
@@ -40,7 +41,7 @@ public class CapacitorMusicControlsInfo: NSObject {
         self.hasNext = dictionary["hasNext"] as? Bool;
         self.hasSkipForward = dictionary["hasSkipForward"] as? Bool;
         self.hasSkipBackward = dictionary["hasSkipBackward"] as? Bool;
-        
+        self.hasOptions = dictionary["hasOptions"] as? Bool;
         self.hasScrubbing = dictionary["hasScrubbing"] as? Bool;
         self.skipForwardInterval = dictionary["skipForwardInterval"] as? NSNumber;
         self.skipBackwardInterval = dictionary["skipBackwardInterval"] as? NSNumber;
