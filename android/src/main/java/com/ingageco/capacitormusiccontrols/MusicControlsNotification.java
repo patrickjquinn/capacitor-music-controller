@@ -340,6 +340,7 @@ public class MusicControlsNotification {
 			}
 			builder.setStyle(new Notification.MediaStyle().setShowActionsInCompactView(args));
 		}
+
 		this.notificationBuilder = builder;
 	}
 

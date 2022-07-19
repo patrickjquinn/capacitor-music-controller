@@ -93,6 +93,14 @@ public class CapacitorMusicControls extends Plugin {
 		final Context context = getActivity().getApplicationContext();
 		final Activity activity = getActivity();
 
+		// unregisterMediaButtonEvent();
+		// if (mConnection != null) {
+		// 	Intent stopServiceIntent = new Intent(activity, CMCNotifyKiller.class);
+		// 	activity.unbindService(mConnection);
+		// 	activity.stopService(stopServiceIntent);
+		// 	mConnection = null;
+		// }
+		this.destroyLocal();
 		initialize();
 		try{
 			final MusicControlsInfos infos = new MusicControlsInfos(options);
@@ -219,6 +227,33 @@ public class CapacitorMusicControls extends Plugin {
 			mConnection = null;
 		}
 		call.resolve();
+	}
+
+	private void destroyLocal() {
+		final Activity activity = getActivity();
+		final Context context=activity.getApplicationContext();
+
+		// this.destroyPlayerNotification();
+		// mMessageReceiver.stopListening();
+
+		try{
+
+			context.unregisterReceiver(mMessageReceiver);
+
+		} catch(IllegalArgumentException e) {
+
+			e.printStackTrace();
+
+		}
+
+		unregisterMediaButtonEvent();
+
+		// if (mConnection != null) {
+		// 	Intent stopServiceIntent = new Intent(activity, CMCNotifyKiller.class);
+		// 	activity.unbindService(mConnection);
+		// 	activity.stopService(stopServiceIntent);
+		// 	mConnection = null;
+		// }
 	}
 
 

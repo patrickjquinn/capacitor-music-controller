@@ -1,24 +1,25 @@
 import Foundation
 import Capacitor
+import AVFoundation
 
 import MediaPlayer;
 
 extension DispatchQueue {
+    
+    static func background(delay: Double = 0.0, background: (()->Void)? = nil, completion: (() -> Void)? = nil) {
+        DispatchQueue.global(qos: .background).async {
+            background?()
+            if let completion = completion {
+                DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
+                    completion()
+                })
+            }
+        }
+    }
+    
+}
 
-     static func background(delay: Double = 0.0, background: (()->Void)? = nil, completion: (() -> Void)? = nil) {
-         DispatchQueue.global(qos: .background).async {
-             background?()
-             if let completion = completion {
-                 DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
-                     completion()
-                 })
-             }
-         }
-     }
 
- }
-
- 
 /**
  * Please read the Capacitor iOS Plugin Development Guide
  * here: https://capacitor.ionicframework.com/docs/plugins/ios
@@ -30,31 +31,35 @@ public class CapacitorMusicControls: CAPPlugin {
     var eventListnerActive = false;
     var lastArtUrl = "";
     var lastArtData: Data? = nil;
- 
+    
     @objc func create(_ call: CAPPluginCall) {
         let options: Dictionary = call.options;
-
+        
+        DispatchQueue.main.async {
+            UIApplication.shared.becomeFirstResponder()
+        }
+        
         self.musicControlsInfo = CapacitorMusicControlsInfo(dictionary: options as NSDictionary);
         
         self.setupControls();
         
         print("MusicControlsOptions:")
         for optionLine in options {
-          print(optionLine)
+            print(optionLine)
         }
-
+        
         if(!self.eventListnerActive){
             self.registerMusicControlsEventListener();
         }
-
+        
         var nowPlayingInfo = [String: Any]()
-    
+        
         let duration = self.musicControlsInfo.duration;
         let elapsed = self.musicControlsInfo.elapsed;
         let playbackRate = self.musicControlsInfo.isPlaying! ? 1.0 : 0.0;
-
+        
         let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default();
-
+        
         nowPlayingInfo = [
             MPMediaItemPropertyArtist: self.musicControlsInfo.artist,
             MPMediaItemPropertyTitle:self.musicControlsInfo.track,
@@ -64,17 +69,17 @@ public class CapacitorMusicControls: CAPPlugin {
             MPNowPlayingInfoPropertyPlaybackRate:playbackRate
         ]
         
-
+        
         if(self.musicControlsInfo.cover != nil){
-
+            
             let mediaItemArtwork = self.createCoverArtwork(coverUri: self.musicControlsInfo.cover!);
             if(mediaItemArtwork != nil){
                 nowPlayingInfo[MPMediaItemPropertyArtwork] = mediaItemArtwork;
             }
         }
-            
+        
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
-
+        
         call.resolve();
         
     }
@@ -89,38 +94,105 @@ public class CapacitorMusicControls: CAPPlugin {
         let elapsed = self.musicControlsInfo.elapsed;
         let playbackRate = self.musicControlsInfo.isPlaying;
         
-
+        
         let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default();
         var nowPlayingInfo = nowPlayingInfoCenter.nowPlayingInfo;
- 
- 
+        
+        
         nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = elapsed;
         nowPlayingInfo?[MPNowPlayingInfoPropertyPlaybackRate] = playbackRate;
         
         nowPlayingInfoCenter.nowPlayingInfo = nowPlayingInfo
-
+        
         call.resolve();
-
+        
     }
     
     @objc func updateElapsed(_ call: CAPPluginCall) {
-         self.updateIsPlaying(call);
-     }
+        self.updateIsPlaying(call);
+    }
     
     
     @objc func listen(_ call: CAPPluginCall) {
-            self.registerMusicControlsEventListener();
-            call.resolve();
-   }
-       
+        self.registerMusicControlsEventListener();
+        call.resolve();
+    }
+    
     
     @objc func destroy(_ call: CAPPluginCall) {
         self.deregisterMusicControlsEventListener();
-        
         call.resolve();
-           
+        
     }
- 
+    
+    func activateHeadPhonesStatus(){
+        NotificationCenter.default.addObserver(self, selector: #selector(audioRouteChangeListener(_:)), name: AVAudioSession.routeChangeNotification, object: nil)
+    }
+    
+    @objc func audioRouteChangeListener(_ notification:Notification) {
+        let audioRouteChangeReason = notification.userInfo![AVAudioSessionRouteChangeReasonKey] as! UInt
+        
+        switch audioRouteChangeReason {
+        case AVAudioSession.RouteChangeReason.newDeviceAvailable.rawValue:
+            print("headphone plugged in")
+            self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-headset-plugged" ])
+        case AVAudioSession.RouteChangeReason.oldDeviceUnavailable.rawValue:
+            print("headphone pulled out")
+            self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-headset-unplugged" ])
+        default:
+            break
+        }
+        //        guard let userInfo = notification.userInfo,
+        //                let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
+        //                let reason = AVAudioSession.RouteChangeReason(rawValue:reasonValue) else {
+        //                        return
+        //        }
+        //        switch reason {
+        //            case .newDeviceAvailable:
+        //                let session = AVAudioSession.sharedInstance()
+        //                for output in session.currentRoute.outputs where output.portType == AVAudioSession.Port.headphones {
+        //                    print("headphone plugged in")
+        //                    self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-headset-plugged" ])
+        //                    break
+        //                }
+        //            case .oldDeviceUnavailable:
+        //                if let previousRoute =
+        //                    userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription {
+        //                    for output in previousRoute.outputs where output.portType == AVAudioSession.Port.headphones {
+        //                        print("headphone pulled out")
+        //                        self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-headset-unplugged" ])
+        //                        break
+        //                    }
+        //                }
+        //                default: ()
+        //            }
+        
+    }
+    
+    func remoteControlReceivedWithEvent(event: UIEvent?) {
+        switch event?.subtype {
+        case UIEvent.EventSubtype.remoteControlPlay?:
+            self.initAudioSession()
+            self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-play" ])
+            break
+        case UIEvent.EventSubtype.remoteControlPause?:
+            self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-pause" ])
+            break
+        case UIEvent.EventSubtype.remoteControlPreviousTrack?:
+            self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-previous" ])
+            break;
+        case UIEvent.EventSubtype.remoteControlNextTrack?:
+            self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-next" ])
+            break;
+        case UIEvent.EventSubtype.remoteControlTogglePlayPause?:
+            self.initAudioSession()
+            self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-toggle-play-pause" ])
+            break
+        default:
+            break
+        }
+    }
+    
     
     func createCoverArtwork(coverUri : String) -> MPMediaItemArtwork? {
         
@@ -138,7 +210,7 @@ public class CapacitorMusicControls: CAPPlugin {
                     let coverImageData = try Data(contentsOf: coverImageUrl);
                     coverImage = UIImage(data:coverImageData)!;
                     lastArtData = coverImageData
-     
+                    
                 } catch {
                     lastArtUrl = "";
                     lastArtData = nil;
@@ -154,62 +226,68 @@ public class CapacitorMusicControls: CAPPlugin {
             } else {
                 coverImage = nil;
             }
- 
+            
         }
         else if (coverUri != "") {
-           //  print("coverImage empty");
-
-//            let baseCoverImagePath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
-//            let fullCoverImagePath = String(format:"%@%@", baseCoverImagePath, coverUri);
-//
+            //  print("coverImage empty");
+            
+            //            let baseCoverImagePath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
+            //            let fullCoverImagePath = String(format:"%@%@", baseCoverImagePath, coverUri);
+            //
             let defaultManager = FileManager.default;
             
             let coverFilePath = "public/" + coverUri;
             
             let urlPath = Bundle.main.path(forResource: coverFilePath, ofType: "");
-
- 
+            
+            
             if(urlPath != nil && defaultManager.fileExists(atPath: urlPath!)){
                 coverImage = UIImage(contentsOfFile: urlPath!)!
             } else {
                 coverImage = nil;
             }
-
+            
         }
         else {
             coverImage = nil;
         }
         
         if(coverImage != nil && self.isCoverImageValid(inputImage: coverImage!)){
-
+            
             return MPMediaItemArtwork.init(boundsSize: coverImage!.size, requestHandler: { (size) -> UIImage in
-                    return coverImage!
+                return coverImage!
             })
         } else {
             return nil;
         }
-                
+        
     }
     
     func isCoverImageValid(inputImage: UIImage) -> Bool {
-        
         let cii = CIImage(image: inputImage);
         
         return inputImage != nil && cii != nil;
-
+    }
+    
+    func initAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+        } catch {
+            print("Couldn't create the audio session")
+        }
     }
     
     @objc func changedThumbSliderOnLockScreen(_ event: MPChangePlaybackPositionCommandEvent) -> MPRemoteCommandHandlerStatus {
         self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-skip-to", "position" : event.positionTime ])
         return .success;
     }
-
+    
     @objc func likeEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-liked",])
         return .success;
     }
-
-     @objc func dislikeEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+    
+    @objc func dislikeEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-dislike" ])
         return .success;
     }
@@ -239,14 +317,15 @@ public class CapacitorMusicControls: CAPPlugin {
         return .success;
     }
     
-   @objc func playEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+    @objc func playEvent(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
         self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-play" ])
+        self.initAudioSession()
         return .success;
     }
     
     func setupControls() {
         let commandCenter = MPRemoteCommandCenter.shared();
-           
+        
         commandCenter.playCommand.isEnabled = true;
         commandCenter.playCommand.addTarget(self, action: #selector(CapacitorMusicControls.playEvent(_:)));
         commandCenter.pauseCommand.isEnabled = true;
@@ -278,7 +357,7 @@ public class CapacitorMusicControls: CAPPlugin {
             commandCenter.changePlaybackPositionCommand.isEnabled = true;
             commandCenter.changePlaybackPositionCommand.addTarget(self, action: #selector(CapacitorMusicControls.changedThumbSliderOnLockScreen(_:)));
         }
-
+        
         if(self.musicControlsInfo.hasOptions == true){
             commandCenter.likeCommand.isEnabled = true;
             commandCenter.likeCommand.addTarget(self, action: #selector(CapacitorMusicControls.likeEvent(_:)));
@@ -291,11 +370,12 @@ public class CapacitorMusicControls: CAPPlugin {
     func registerMusicControlsEventListener(){
         
         self.eventListnerActive = true;
-
+        
         DispatchQueue.main.async {
             UIApplication.shared.beginReceivingRemoteControlEvents();
         }
         
+        self.activateHeadPhonesStatus();
         self.setupControls();
     }
     
@@ -306,26 +386,26 @@ public class CapacitorMusicControls: CAPPlugin {
         DispatchQueue.main.async { // Correct
             UIApplication.shared.endReceivingRemoteControlEvents();
         }
-            
-         let commandCenter = MPRemoteCommandCenter.shared();
-
+        
+        let commandCenter = MPRemoteCommandCenter.shared();
+        
         commandCenter.playCommand.isEnabled = false;
         commandCenter.playCommand.removeTarget(self);
         commandCenter.pauseCommand.isEnabled = false;
         commandCenter.pauseCommand.removeTarget(self);
-
+        
         if(commandCenter.nextTrackCommand.isEnabled){
-
+            
             commandCenter.nextTrackCommand.isEnabled = false;
             commandCenter.nextTrackCommand.removeTarget(self);
-
+            
         }
-
+        
         if(commandCenter.previousTrackCommand.isEnabled){
-
+            
             commandCenter.previousTrackCommand.isEnabled = false;
             commandCenter.previousTrackCommand.removeTarget(self);
-
+            
         }
         
         if(commandCenter.changePlaybackPositionCommand.isEnabled){
@@ -350,3 +430,4 @@ public class CapacitorMusicControls: CAPPlugin {
     }
     
 }
+

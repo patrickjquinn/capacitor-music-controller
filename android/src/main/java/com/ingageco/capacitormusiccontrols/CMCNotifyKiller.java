@@ -6,7 +6,6 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.ServiceConnection;
 import android.os.IBinder;
-import android.os.Binder;
 import android.os.PowerManager;
 import android.app.NotificationManager;
 import android.app.Notification;
@@ -79,9 +78,9 @@ public class CMCNotifyKiller extends Service {
 	}
 
 	/**
-	* Put the service in a foreground state to prevent app from being killed
-	* by the OS.
-	*/
+	 * Put the service in a foreground state to prevent app from being killed
+	 * by the OS.
+	 */
 	private void keepAwake(boolean do_wakelock) {
 		if (notification != null && notification.get() != null && !foregroundStarted) {
 			Log.i(TAG, "Starting ForegroundService");
@@ -91,7 +90,7 @@ public class CMCNotifyKiller extends Service {
 
 		if (do_wakelock) {
 			PowerManager pm = (PowerManager)
-				getSystemService(POWER_SERVICE);
+					getSystemService(POWER_SERVICE);
 
 			wakeLock = pm.newWakeLock(PARTIAL_WAKE_LOCK, TAG);
 
@@ -106,8 +105,8 @@ public class CMCNotifyKiller extends Service {
 	}
 
 	/**
-	* Shared manager for the notification service.
-	*/
+	 * Shared manager for the notification service.
+	 */
 	private NotificationManager getNotificationManager() {
 		return (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 	}
@@ -120,31 +119,32 @@ public class CMCNotifyKiller extends Service {
 	}
 
 	/**
-	* Stop background mode.
-	*/
+	 * Stop background mode.
+	 */
 	private void sleepWell(boolean do_wakelock) {
-//		Log.i(TAG, "Stopping WakeLock");
-//		if (foregroundStarted) {
-//			Log.i(TAG, "Stopping ForegroundService");
-//			stopForeground(true);
-//			foregroundStarted = false;
-//			Log.i(TAG, "ForegroundService stopped");
-//		}
+		Log.i(TAG, "Stopping WakeLock");
+		if (foregroundStarted) {
+			Log.i(TAG, "Stopping ForegroundService");
+			stopForeground(true);
+			foregroundStarted = false;
+			Log.i(TAG, "ForegroundService stopped");
+		}
 //		mNM.cancel(NOTIFICATION_ID);
-//
-//		if (wakeLock != null && do_wakelock) {
-//			if (wakeLock.isHeld()) {
-//				try {
-//					wakeLock.release();
-//					Log.i(TAG, "wakeLock released");
-//				} catch (Exception e) {
-//					Log.e(TAG, e.getMessage());
-//				}
-//			} else {
-//				Log.i(TAG, "wakeLock not held");
-//			}
-//			wakeLock = null;
-//		}
+		mNM.cancelAll();
+
+		if (wakeLock != null && do_wakelock) {
+			if (wakeLock.isHeld()) {
+				try {
+					wakeLock.release();
+					Log.i(TAG, "wakeLock released");
+				} catch (Exception e) {
+					Log.e(TAG, e.getMessage());
+				}
+			} else {
+				Log.i(TAG, "wakeLock not held");
+			}
+			wakeLock = null;
+		}
 	}
 
 	@Override

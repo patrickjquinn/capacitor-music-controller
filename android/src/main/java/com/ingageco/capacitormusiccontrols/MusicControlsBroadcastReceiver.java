@@ -1,15 +1,13 @@
 package com.ingageco.capacitormusiccontrols;
 
 
-import com.getcapacitor.JSObject;
-
-import android.util.Log;
-import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.content.BroadcastReceiver;
+import android.util.Log;
 import android.view.KeyEvent;
+
+import com.getcapacitor.JSObject;
 
 public class MusicControlsBroadcastReceiver extends BroadcastReceiver {
 
@@ -147,8 +145,8 @@ public class MusicControlsBroadcastReceiver extends BroadcastReceiver {
 				this.musicControls.controlsNotification(ret);
 				this.musicControls.destroyPlayerNotification();
 			} else {
-			ret.put("message", message);
-			this.musicControls.controlsNotification(ret);
+				ret.put("message", message);
+				this.musicControls.controlsNotification(ret);
 			}
 
 
