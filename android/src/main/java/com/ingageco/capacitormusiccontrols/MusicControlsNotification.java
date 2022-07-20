@@ -82,6 +82,8 @@ public class MusicControlsNotification {
 
 	private void createNotification() {
 		final Notification noti = this.notificationBuilder.build();
+
+		// noti.flags = Notification.FLAG_AUTO_CANCEL;
 		if (killer_service != null) {
 			killer_service.get().setNotification(noti);
 		}

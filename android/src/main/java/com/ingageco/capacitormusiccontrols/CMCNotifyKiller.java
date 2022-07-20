@@ -1,18 +1,18 @@
 package com.ingageco.capacitormusiccontrols;
 
-import java.lang.ref.WeakReference;
+import static android.os.PowerManager.PARTIAL_WAKE_LOCK;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
+import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.app.NotificationManager;
-import android.app.Notification;
-import android.content.Intent;
 import android.util.Log;
 
-import static android.os.PowerManager.PARTIAL_WAKE_LOCK;
+import java.lang.ref.WeakReference;
 
 public class CMCNotifyKiller extends Service {
 	private static final String TAG = "cmcapp:CMCNotifyKiller";
@@ -129,8 +129,8 @@ public class CMCNotifyKiller extends Service {
 			foregroundStarted = false;
 			Log.i(TAG, "ForegroundService stopped");
 		}
-//		mNM.cancel(NOTIFICATION_ID);
-		mNM.cancelAll();
+		mNM.cancel(NOTIFICATION_ID);
+		// mNM.cancelAll();
 
 		if (wakeLock != null && do_wakelock) {
 			if (wakeLock.isHeld()) {
@@ -147,18 +147,18 @@ public class CMCNotifyKiller extends Service {
 		}
 	}
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		sleepWell(true);
-	}
+	 @Override
+	 public void onDestroy() {
+	 	stopForeground(true);
+	 	super.onDestroy();
+	 }
 
-	@Override
-	public void onTaskRemoved(Intent rootIntent) {
-		super.onTaskRemoved(rootIntent);
-		sleepWell(true);
-		if(bounded) {
-			activity.unbindService(connection);
-		}
-	}
+	 @Override
+	 public void onTaskRemoved(Intent rootIntent) {
+	 	 super.onTaskRemoved(rootIntent);
+		 stopForeground(true);
+		 if(bounded) {
+	 		activity.unbindService(connection);
+	 	}
+	 }
 }

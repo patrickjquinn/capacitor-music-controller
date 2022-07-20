@@ -132,7 +132,6 @@ public class CapacitorMusicControls extends Plugin {
 			call.resolve();
 		}catch(JSONException e){
 			call.reject("error in initializing MusicControlsInfos "+e.toString());
-
 		}
 	}
 
@@ -144,13 +143,10 @@ public class CapacitorMusicControls extends Plugin {
 
 		notification = new MusicControlsNotification(activity, notificationID);
 
-
 		final MusicControlsNotification my_notification = notification;
-
 
 		mMessageReceiver = new MusicControlsBroadcastReceiver(this);
 		registerBroadcaster(mMessageReceiver);
-
 
 		mediaSessionCompat = new MediaSessionCompat(context, "capacitor-music-controls-media-session", null, mediaButtonPendingIntent);
 		mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
@@ -209,13 +205,9 @@ public class CapacitorMusicControls extends Plugin {
 		// mMessageReceiver.stopListening();
 
 		try{
-
 			context.unregisterReceiver(mMessageReceiver);
-
 		} catch(IllegalArgumentException e) {
-
 			e.printStackTrace();
-
 		}
 
 		unregisterMediaButtonEvent();
@@ -254,6 +246,29 @@ public class CapacitorMusicControls extends Plugin {
 		// 	activity.stopService(stopServiceIntent);
 		// 	mConnection = null;
 		// }
+	}
+
+	public void fullDestroyLocal () {
+		final Activity activity = getActivity();
+		final Context context=activity.getApplicationContext();
+
+		this.destroyPlayerNotification();
+		// mMessageReceiver.stopListening();
+
+		try{
+			context.unregisterReceiver(mMessageReceiver);
+		} catch(IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+
+		unregisterMediaButtonEvent();
+
+		if (mConnection != null) {
+			Intent stopServiceIntent = new Intent(activity, CMCNotifyKiller.class);
+			activity.unbindService(mConnection);
+			activity.stopService(stopServiceIntent);
+			mConnection = null;
+		}
 	}
 
 
@@ -439,4 +454,10 @@ public class CapacitorMusicControls extends Plugin {
 			return null;
 		}
 	}
+
+	@Override
+    protected void handleOnDestroy() {
+        fullDestroyLocal();
+        super.handleOnDestroy();
+    }
 }
