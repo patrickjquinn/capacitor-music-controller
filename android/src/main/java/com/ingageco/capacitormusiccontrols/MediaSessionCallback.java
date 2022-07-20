@@ -7,20 +7,17 @@ import android.view.KeyEvent;
 
 import com.getcapacitor.JSObject;
 
-
 public class MediaSessionCallback extends MediaSessionCompat.Callback {
 
   private CapacitorMusicControls musicControls;
 
-
-  public MediaSessionCallback(CapacitorMusicControls musicControls){
-    this.musicControls=musicControls;
+  public MediaSessionCallback(CapacitorMusicControls musicControls) {
+    this.musicControls = musicControls;
   }
 
   @Override
   public void onPlay() {
     super.onPlay();
-
 
     JSObject ret = new JSObject();
     ret.put("message", "music-controls-media-button-play");
@@ -131,4 +128,3 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
     return true;
   }
 }
-

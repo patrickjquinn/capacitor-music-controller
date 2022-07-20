@@ -42,49 +42,51 @@ public class CapacitorMusicControls extends Plugin {
 	private MusicControlsBroadcastReceiver mMessageReceiver;
 	private MusicControlsNotification notification;
 	private MediaSessionCompat mediaSessionCompat;
-	private final int notificationID=7824;
+	private final int notificationID = 7824;
 	private AudioManager mAudioManager;
 	private PendingIntent mediaButtonPendingIntent;
-	private boolean mediaButtonAccess=true;
+	private boolean mediaButtonAccess = true;
 	private ServiceConnection mConnection;
 	private MediaPlayer mMediaPlayer;
 
 	private AudioManager.OnAudioFocusChangeListener changedListener = new AudioManager.OnAudioFocusChangeListener() {
-		 @Override
-		 public void onAudioFocusChange(int focusChange) {
-			 switch (focusChange) {
-				 case AudioManager.AUDIOFOCUS_GAIN:
-					 if (mMediaPlayer != null){
-						 mMediaPlayer.stop();
-						 mMediaPlayer.release();
-					 }
-					 mMediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), R.raw.silence);
-					 mMediaPlayer.start();
-					 mMediaPlayer.setLooping(true);
-				 case AudioManager.AUDIOFOCUS_LOSS:
-					 Log.d(TAG,"AUDIOFOCUS_LOSS");
-					 // stop and release your player -- to implement event
-					 break;
-				 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-					 Log.d(TAG,"AUDIOFOCUS_LOSS_TRANSIENT");
-					 // pause your player -- to implement event
-					 break;
-				 case AudioManager.AUDIOFOCUS_REQUEST_FAILED:
-					 Log.d(TAG, "AUDIOFOCUS_DENIED");
-				 case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-					 Log.d(TAG,"AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
-					 // Lower volume
-					 break;
-			 }
-		 }
-	 };
+		@Override
+		public void onAudioFocusChange(int focusChange) {
+			JSObject ret = new JSObject();
+			switch (focusChange) {
+				case AudioManager.AUDIOFOCUS_GAIN:
+					if (mMediaPlayer != null) {
+						mMediaPlayer.stop();
+						mMediaPlayer.release();
+					}
+					mMediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), R.raw.silence);
+					mMediaPlayer.start();
+					mMediaPlayer.setLooping(true);
+				case AudioManager.AUDIOFOCUS_LOSS:
+					Log.d(TAG, "AUDIOFOCUS_LOSS");
+					ret.put("message", "music-controls-pause");
+					controlsNotification(ret);
+					break;
+				case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+					ret.put("message", "music-controls-pause");
+					controlsNotification(ret);
+					Log.d(TAG, "AUDIOFOCUS_LOSS_TRANSIENT");
+					break;
+				case AudioManager.AUDIOFOCUS_REQUEST_FAILED:
+					Log.d(TAG, "AUDIOFOCUS_DENIED");
+				case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+					Log.d(TAG, "AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
+					// Lower volume
+					break;
+			}
+		}
+	};
 	private AudioManager audioManager;
 	private MediaSessionCallback mMediaSessionCallback;
 
-	private void askForAudioFocus () {
+	private void askForAudioFocus() {
 		mAudioManager.requestAudioFocus(changedListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 	}
-
 
 	@PluginMethod()
 	public void create(PluginCall call) {
@@ -95,14 +97,14 @@ public class CapacitorMusicControls extends Plugin {
 
 		// unregisterMediaButtonEvent();
 		// if (mConnection != null) {
-		// 	Intent stopServiceIntent = new Intent(activity, CMCNotifyKiller.class);
-		// 	activity.unbindService(mConnection);
-		// 	activity.stopService(stopServiceIntent);
-		// 	mConnection = null;
+		// Intent stopServiceIntent = new Intent(activity, CMCNotifyKiller.class);
+		// activity.unbindService(mConnection);
+		// activity.stopService(stopServiceIntent);
+		// mConnection = null;
 		// }
 		this.destroyLocal();
 		initialize();
-		try{
+		try {
 			final MusicControlsInfos infos = new MusicControlsInfos(options);
 
 			final MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
@@ -113,25 +115,25 @@ public class CapacitorMusicControls extends Plugin {
 			metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_TITLE, infos.track);
 			// artists
 			metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ARTIST, infos.artist);
-			//album
+			// album
 			metadataBuilder.putString(MediaMetadataCompat.METADATA_KEY_ALBUM, infos.album);
 
 			Bitmap art = getBitmapCover(infos.cover);
-			if(art != null){
+			if (art != null) {
 				metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ALBUM_ART, art);
 				metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, art);
 			}
 
 			mediaSessionCompat.setMetadata(metadataBuilder.build());
 
-			if(infos.isPlaying)
+			if (infos.isPlaying)
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
 			else
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
 
 			call.resolve();
-		}catch(JSONException e){
-			call.reject("error in initializing MusicControlsInfos "+e.toString());
+		} catch (JSONException e) {
+			call.reject("error in initializing MusicControlsInfos " + e.toString());
 		}
 	}
 
@@ -148,9 +150,10 @@ public class CapacitorMusicControls extends Plugin {
 		mMessageReceiver = new MusicControlsBroadcastReceiver(this);
 		registerBroadcaster(mMessageReceiver);
 
-		mediaSessionCompat = new MediaSessionCompat(context, "capacitor-music-controls-media-session", null, mediaButtonPendingIntent);
-		mediaSessionCompat.setFlags(MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-
+		mediaSessionCompat = new MediaSessionCompat(context, "capacitor-music-controls-media-session", null,
+				mediaButtonPendingIntent);
+		mediaSessionCompat.setFlags(
+				MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
 		setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
 		mediaSessionCompat.setActive(true);
@@ -161,15 +164,15 @@ public class CapacitorMusicControls extends Plugin {
 
 		// Register media (headset) button event receiver
 		try {
-			mAudioManager = (AudioManager)context.getSystemService(Context.AUDIO_SERVICE);
+			mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 			Intent headsetIntent = new Intent("music-controls-media-button");
-			mediaButtonPendingIntent = PendingIntent.getBroadcast(context, 0, headsetIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			mediaButtonPendingIntent = PendingIntent.getBroadcast(context, 0, headsetIntent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
 			registerMediaButtonEvent();
 		} catch (Exception e) {
-			mediaButtonAccess=false;
+			mediaButtonAccess = false;
 			e.printStackTrace();
 		}
-
 
 		// Notification Killer
 		ServiceConnection newMConnection = new ServiceConnection() {
@@ -182,13 +185,13 @@ public class CapacitorMusicControls extends Plugin {
 				service.startService(new Intent(activity, CMCNotifyKiller.class));
 				Log.i(TAG, "service Started");
 			}
+
 			public void onServiceDisconnected(ComponentName className) {
 				Log.i(TAG, "service Disconnected");
 			}
 		};
 
-
-		Intent startServiceIntent = new Intent(activity,CMCNotifyKiller.class);
+		Intent startServiceIntent = new Intent(activity, CMCNotifyKiller.class);
 		startServiceIntent.putExtra("notificationID", notificationID);
 		activity.bindService(startServiceIntent, newMConnection, Context.BIND_AUTO_CREATE);
 
@@ -199,14 +202,14 @@ public class CapacitorMusicControls extends Plugin {
 	public void destroy(PluginCall call) {
 
 		final Activity activity = getActivity();
-		final Context context=activity.getApplicationContext();
+		final Context context = activity.getApplicationContext();
 
 		this.destroyPlayerNotification();
 		// mMessageReceiver.stopListening();
 
-		try{
+		try {
 			context.unregisterReceiver(mMessageReceiver);
-		} catch(IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
 
@@ -223,16 +226,16 @@ public class CapacitorMusicControls extends Plugin {
 
 	private void destroyLocal() {
 		final Activity activity = getActivity();
-		final Context context=activity.getApplicationContext();
+		final Context context = activity.getApplicationContext();
 
 		// this.destroyPlayerNotification();
 		// mMessageReceiver.stopListening();
 
-		try{
+		try {
 
 			context.unregisterReceiver(mMessageReceiver);
 
-		} catch(IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 
 			e.printStackTrace();
 
@@ -241,23 +244,23 @@ public class CapacitorMusicControls extends Plugin {
 		unregisterMediaButtonEvent();
 
 		// if (mConnection != null) {
-		// 	Intent stopServiceIntent = new Intent(activity, CMCNotifyKiller.class);
-		// 	activity.unbindService(mConnection);
-		// 	activity.stopService(stopServiceIntent);
-		// 	mConnection = null;
+		// Intent stopServiceIntent = new Intent(activity, CMCNotifyKiller.class);
+		// activity.unbindService(mConnection);
+		// activity.stopService(stopServiceIntent);
+		// mConnection = null;
 		// }
 	}
 
-	public void fullDestroyLocal () {
+	public void fullDestroyLocal() {
 		final Activity activity = getActivity();
-		final Context context=activity.getApplicationContext();
+		final Context context = activity.getApplicationContext();
 
 		this.destroyPlayerNotification();
 		// mMessageReceiver.stopListening();
 
-		try{
+		try {
 			context.unregisterReceiver(mMessageReceiver);
-		} catch(IllegalArgumentException e) {
+		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
 		}
 
@@ -271,25 +274,24 @@ public class CapacitorMusicControls extends Plugin {
 		}
 	}
 
-
 	@PluginMethod()
 	public void updateIsPlaying(PluginCall call) {
 		JSObject options = call.getData();
 
-		try{
+		try {
 			final boolean isPlaying = options.getBoolean("isPlaying");
 			this.notification.updateIsPlaying(isPlaying);
 
-			if(isPlaying) {
+			if (isPlaying) {
 				this.askForAudioFocus();
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
-			}else {
+			} else {
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
 				// this.askForAudioFocus();
 			}
 			call.resolve();
-		} catch(JSONException e){
-			System.out.println("toString(): "  + e.toString());
+		} catch (JSONException e) {
+			System.out.println("toString(): " + e.toString());
 			System.out.println("getMessage(): " + e.getMessage());
 			System.out.println("StackTrace: ");
 			e.printStackTrace();
@@ -302,18 +304,18 @@ public class CapacitorMusicControls extends Plugin {
 		JSObject params = call.getData();
 
 		// final JSONObject params = args.getJSONObject(0);
-		try{
+		try {
 			final boolean isPlaying = params.getBoolean("isPlaying");
 			this.notification.updateIsPlaying(isPlaying);
 
-			if(isPlaying) {
+			if (isPlaying) {
 				this.askForAudioFocus();
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
 			} else {
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
 			}
 			call.resolve();
-		} catch(JSONException e){
+		} catch (JSONException e) {
 			call.reject("error in updateElapsed");
 		} catch (NullPointerException e) {
 			e.printStackTrace();
@@ -325,23 +327,22 @@ public class CapacitorMusicControls extends Plugin {
 	public void updateDismissable(PluginCall call) {
 		JSObject params = call.getData();
 		// final JSONObject params = args.getJSONObject(0);
-		try{
+		try {
 			final boolean dismissable = params.getBoolean("dismissable");
 			this.notification.updateDismissable(dismissable);
 			call.resolve();
-		} catch(JSONException e){
+		} catch (JSONException e) {
 			call.reject("error in updateDismissable");
 		}
 
 	}
 
-	public void controlsNotification(JSObject ret){
-		Log.i(TAG, "controlsNotification fired "  + ret.getString("message"));
+	public void controlsNotification(JSObject ret) {
+		Log.i(TAG, "controlsNotification fired " + ret.getString("message"));
 		notifyListeners("controlsNotification", ret);
 	}
 
-
-	private void registerBroadcaster(MusicControlsBroadcastReceiver mMessageReceiver){
+	private void registerBroadcaster(MusicControlsBroadcastReceiver mMessageReceiver) {
 		final Context context = getActivity().getApplicationContext();
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-previous"));
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-pause"));
@@ -358,19 +359,19 @@ public class CapacitorMusicControls extends Plugin {
 	}
 
 	// Register pendingIntent for broacast
-	public void registerMediaButtonEvent(){
+	public void registerMediaButtonEvent() {
 		if (this.mediaSessionCompat != null) {
 			this.mediaSessionCompat.setMediaButtonReceiver(this.mediaButtonPendingIntent);
 		}
 	}
 
-	public void unregisterMediaButtonEvent(){
+	public void unregisterMediaButtonEvent() {
 		if (this.mediaSessionCompat != null) {
 			this.mediaSessionCompat.setMediaButtonReceiver(null);
 		}
 	}
 
-	public void destroyPlayerNotification(){
+	public void destroyPlayerNotification() {
 		if (this.notification != null) {
 			try {
 				this.notification.destroy();
@@ -381,16 +382,17 @@ public class CapacitorMusicControls extends Plugin {
 		}
 	}
 
-
 	private void setMediaPlaybackState(int state) {
 		PlaybackStateCompat.Builder playbackstateBuilder = new PlaybackStateCompat.Builder();
-		if( state == PlaybackStateCompat.STATE_PLAYING ) {
-			playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PAUSE | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+		if (state == PlaybackStateCompat.STATE_PLAYING) {
+			playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PAUSE
+					| PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
 					PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
 					PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH);
 			playbackstateBuilder.setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 1.0f);
 		} else {
-			playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY | PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
+			playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY
+					| PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
 					PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
 					PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH);
 			playbackstateBuilder.setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 0);
@@ -399,9 +401,9 @@ public class CapacitorMusicControls extends Plugin {
 	}
 
 	// Get image from url
-	private Bitmap getBitmapCover(String coverURL){
-		try{
-			if(coverURL.matches("^(https?|ftp)://.*$"))
+	private Bitmap getBitmapCover(String coverURL) {
+		try {
+			if (coverURL.matches("^(https?|ftp)://.*$"))
 				// Remote image
 				return getBitmapFromURL(coverURL);
 			else {
@@ -415,7 +417,7 @@ public class CapacitorMusicControls extends Plugin {
 	}
 
 	// get Local image
-	private Bitmap getBitmapFromLocal(String localURL){
+	private Bitmap getBitmapFromLocal(String localURL) {
 		try {
 			Uri uri = Uri.parse(localURL);
 			File file = new File(uri.getPath());
@@ -456,8 +458,8 @@ public class CapacitorMusicControls extends Plugin {
 	}
 
 	@Override
-    protected void handleOnDestroy() {
-        fullDestroyLocal();
-        super.handleOnDestroy();
-    }
+	protected void handleOnDestroy() {
+		fullDestroyLocal();
+		super.handleOnDestroy();
+	}
 }
