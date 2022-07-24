@@ -24,6 +24,8 @@ export interface CapacitorMusicControlsInfo {
     prevIcon?: string;
     nextIcon?: string;
     closeIcon?: string;
+    thumbsUpIcon?: string;
+    thumbsDownIcon?: string;
     notificationIcon?: string;
 }
 
@@ -54,7 +56,7 @@ export interface CapacitorMusicControlsPlugin {
      * Toggle play/pause:
      * @param opts {Object}
      */
-    updateIsPlaying(opts: {isPlaying: boolean}): Promise<void>;
+    updateIsPlaying(opts: {isPlaying: boolean}, elapsed?: number): Promise<void>;
 
     /**
      * Update elapsed time, optionally toggle play/pause:

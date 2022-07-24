@@ -16,6 +16,7 @@ public class MusicControlsInfos{
 	public boolean hasPrev;
 	public boolean hasNext;
 	public boolean hasClose;
+	public boolean hasOptions;
 	public boolean dismissable;
 	public String playIcon;
 	public String pauseIcon;
@@ -23,7 +24,10 @@ public class MusicControlsInfos{
 	public String nextIcon;
 	public String closeIcon;
 	public String notificationIcon;
+	public String thumbsUpIcon;
+	public String thumbsDownIcon;
 	public long duration;
+	public long elapsed;
 
 	public MusicControlsInfos(JSObject args) throws JSONException {
 		final JSObject params = args;
@@ -37,6 +41,7 @@ public class MusicControlsInfos{
 		this.hasPrev = params.getBoolean("hasPrev");
 		this.hasNext = params.getBoolean("hasNext");
 		this.hasClose = params.getBoolean("hasClose");
+		this.hasOptions = params.getBoolean("hasOptions");
 		this.dismissable = params.getBoolean("dismissable");
 		this.playIcon = params.getString("playIcon");
 		this.pauseIcon = params.getString("pauseIcon");
@@ -44,7 +49,10 @@ public class MusicControlsInfos{
 		this.nextIcon = params.getString("nextIcon");
 		this.closeIcon = params.getString("closeIcon");
 		this.notificationIcon = params.getString("notificationIcon");
+		this.thumbsUpIcon = params.getString("thumbsUpIcon");
+		this.thumbsDownIcon = params.getString("thumbsDownIcon");
 		this.duration = params.getLong("duration");
+		this.elapsed = params.getLong("elapsed");
 	}
 
 }

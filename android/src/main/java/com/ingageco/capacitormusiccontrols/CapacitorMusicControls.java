@@ -124,12 +124,20 @@ public class CapacitorMusicControls extends Plugin {
 				metadataBuilder.putBitmap(MediaMetadataCompat.METADATA_KEY_ART, art);
 			}
 
+			if (infos.duration > 0){
+				long duration = infos.duration;
+				if (duration > 0) {
+					metadataBuilder.putLong(MediaMetadataCompat.METADATA_KEY_DURATION, infos.duration * 1000);
+				}
+			}
+
+
 			mediaSessionCompat.setMetadata(metadataBuilder.build());
 
 			if (infos.isPlaying)
-				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, infos.elapsed);
 			else
-				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
+				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, infos.elapsed);
 
 			call.resolve();
 		} catch (JSONException e) {
@@ -143,10 +151,6 @@ public class CapacitorMusicControls extends Plugin {
 
 		final Context context = activity.getApplicationContext();
 
-		notification = new MusicControlsNotification(activity, notificationID);
-
-		final MusicControlsNotification my_notification = notification;
-
 		mMessageReceiver = new MusicControlsBroadcastReceiver(this);
 		registerBroadcaster(mMessageReceiver);
 
@@ -155,12 +159,15 @@ public class CapacitorMusicControls extends Plugin {
 		mediaSessionCompat.setFlags(
 				MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
 
-		setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
+		setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, 0);
 		mediaSessionCompat.setActive(true);
 
 		mMediaSessionCallback = new MediaSessionCallback(this);
 
 		mediaSessionCompat.setCallback(mMediaSessionCallback);
+
+		notification = new MusicControlsNotification(activity, notificationID, mediaSessionCompat.getSessionToken());
+		final MusicControlsNotification my_notification = notification;
 
 		// Register media (headset) button event receiver
 		try {
@@ -280,13 +287,14 @@ public class CapacitorMusicControls extends Plugin {
 
 		try {
 			final boolean isPlaying = options.getBoolean("isPlaying");
+			final long elapsed = options.getLong("elapsed");
 			this.notification.updateIsPlaying(isPlaying);
 
 			if (isPlaying) {
 				this.askForAudioFocus();
-				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, elapsed);
 			} else {
-				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
+				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, elapsed);
 				// this.askForAudioFocus();
 			}
 			call.resolve();
@@ -306,13 +314,14 @@ public class CapacitorMusicControls extends Plugin {
 		// final JSONObject params = args.getJSONObject(0);
 		try {
 			final boolean isPlaying = params.getBoolean("isPlaying");
+			final long elapsed = params.getLong("elapsed");
 			this.notification.updateIsPlaying(isPlaying);
 
 			if (isPlaying) {
 				this.askForAudioFocus();
-				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING);
+				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING,elapsed);
 			} else {
-				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED);
+				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED,elapsed);
 			}
 			call.resolve();
 		} catch (JSONException e) {
@@ -352,6 +361,8 @@ public class CapacitorMusicControls extends Plugin {
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-media-button-previous"));
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-media-button"));
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-destroy"));
+		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-dislike"));
+		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-liked"));
 		context.registerReceiver(mMessageReceiver, new IntentFilter("music-controls-headset-unplugged"));
 
 		// Listen for headset plug/unplug
@@ -382,20 +393,20 @@ public class CapacitorMusicControls extends Plugin {
 		}
 	}
 
-	private void setMediaPlaybackState(int state) {
+	private void setMediaPlaybackState(int state, long elapsed) {
 		PlaybackStateCompat.Builder playbackstateBuilder = new PlaybackStateCompat.Builder();
 		if (state == PlaybackStateCompat.STATE_PLAYING) {
 			playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PAUSE
 					| PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
 					PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
 					PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH);
-			playbackstateBuilder.setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 1.0f);
+			playbackstateBuilder.setState(state, elapsed, 1.0f);
 		} else {
 			playbackstateBuilder.setActions(PlaybackStateCompat.ACTION_PLAY_PAUSE | PlaybackStateCompat.ACTION_PLAY
 					| PlaybackStateCompat.ACTION_SKIP_TO_NEXT | PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS |
 					PlaybackStateCompat.ACTION_PLAY_FROM_MEDIA_ID |
 					PlaybackStateCompat.ACTION_PLAY_FROM_SEARCH);
-			playbackstateBuilder.setState(state, PlaybackStateCompat.PLAYBACK_POSITION_UNKNOWN, 0);
+			playbackstateBuilder.setState(state, elapsed, 0);
 		}
 		this.mediaSessionCompat.setPlaybackState(playbackstateBuilder.build());
 	}
