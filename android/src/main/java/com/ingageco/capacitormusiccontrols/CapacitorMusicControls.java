@@ -23,7 +23,6 @@ import com.getcapacitor.Plugin;
 import com.getcapacitor.PluginCall;
 import com.getcapacitor.PluginMethod;
 import com.getcapacitor.annotation.CapacitorPlugin;
-import com.ingageco.capacitormusiccontrols.capacitormusiccontrolsplugin.R;
 
 import org.json.JSONException;
 
@@ -52,33 +51,33 @@ public class CapacitorMusicControls extends Plugin {
 	private AudioManager.OnAudioFocusChangeListener changedListener = new AudioManager.OnAudioFocusChangeListener() {
 		@Override
 		public void onAudioFocusChange(int focusChange) {
-			JSObject ret = new JSObject();
-			switch (focusChange) {
-				case AudioManager.AUDIOFOCUS_GAIN:
-					if (mMediaPlayer != null) {
-						mMediaPlayer.stop();
-						mMediaPlayer.release();
-					}
-					mMediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), R.raw.silence);
-					mMediaPlayer.start();
-					mMediaPlayer.setLooping(true);
-				case AudioManager.AUDIOFOCUS_LOSS:
-					Log.d(TAG, "AUDIOFOCUS_LOSS");
-					ret.put("message", "music-controls-pause");
-					controlsNotification(ret);
-					break;
-				case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-					ret.put("message", "music-controls-pause");
-					controlsNotification(ret);
-					Log.d(TAG, "AUDIOFOCUS_LOSS_TRANSIENT");
-					break;
-				case AudioManager.AUDIOFOCUS_REQUEST_FAILED:
-					Log.d(TAG, "AUDIOFOCUS_DENIED");
-				case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
-					Log.d(TAG, "AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
-					// Lower volume
-					break;
-			}
+//			JSObject ret = new JSObject();
+//			switch (focusChange) {
+//				case AudioManager.AUDIOFOCUS_GAIN:
+//					if (mMediaPlayer != null) {
+//						mMediaPlayer.stop();
+//						mMediaPlayer.release();
+//					}
+//					mMediaPlayer = MediaPlayer.create(getActivity().getApplicationContext(), R.raw.silence);
+//					mMediaPlayer.start();
+//					mMediaPlayer.setLooping(true);
+//				case AudioManager.AUDIOFOCUS_LOSS:
+//					Log.d(TAG, "AUDIOFOCUS_LOSS");
+//					ret.put("message", "music-controls-pause");
+//					controlsNotification(ret);
+//					break;
+//				case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+//					ret.put("message", "music-controls-pause");
+//					controlsNotification(ret);
+//					Log.d(TAG, "AUDIOFOCUS_LOSS_TRANSIENT");
+//					break;
+//				case AudioManager.AUDIOFOCUS_REQUEST_FAILED:
+//					Log.d(TAG, "AUDIOFOCUS_DENIED");
+//				case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+//					Log.d(TAG, "AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK");
+//					// Lower volume
+//					break;
+//			}
 		}
 	};
 	private AudioManager audioManager;
@@ -283,6 +282,12 @@ public class CapacitorMusicControls extends Plugin {
 
 	@PluginMethod()
 	public void updateIsPlaying(PluginCall call) {
+
+		if (this.notification == null) {
+			call.resolve();
+			return;
+		}
+
 		JSObject options = call.getData();
 
 		try {
@@ -291,7 +296,7 @@ public class CapacitorMusicControls extends Plugin {
 			this.notification.updateIsPlaying(isPlaying);
 
 			if (isPlaying) {
-				this.askForAudioFocus();
+//				this.askForAudioFocus();
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, elapsed);
 			} else {
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED, elapsed);
@@ -309,6 +314,11 @@ public class CapacitorMusicControls extends Plugin {
 
 	@PluginMethod()
 	public void updateElapsed(PluginCall call) {
+		if (this.notification == null) {
+			call.resolve();
+			return;
+		}
+
 		JSObject params = call.getData();
 
 		// final JSONObject params = args.getJSONObject(0);
@@ -318,7 +328,7 @@ public class CapacitorMusicControls extends Plugin {
 			this.notification.updateIsPlaying(isPlaying);
 
 			if (isPlaying) {
-				this.askForAudioFocus();
+//				this.askForAudioFocus();
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING,elapsed);
 			} else {
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PAUSED,elapsed);
@@ -334,6 +344,10 @@ public class CapacitorMusicControls extends Plugin {
 
 	@PluginMethod()
 	public void updateDismissable(PluginCall call) {
+		if (this.notification == null) {
+			call.resolve();
+			return;
+		}
 		JSObject params = call.getData();
 		// final JSONObject params = args.getJSONObject(0);
 		try {

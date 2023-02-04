@@ -98,6 +98,13 @@ public class MediaSessionCallback extends MediaSessionCompat.Callback {
           this.musicControls.controlsNotification(ret);
 
           break;
+
+        case KeyEvent.KEYCODE_HEADSETHOOK:
+          
+          ret.put("message", "music-controls-media-button-play-pause");
+          this.musicControls.controlsNotification(ret);
+          
+          break;
         case KeyEvent.KEYCODE_MEDIA_STOP:
 
           ret.put("message", "music-controls-media-button-stop");

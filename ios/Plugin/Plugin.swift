@@ -5,7 +5,6 @@ import AVFoundation
 import MediaPlayer;
 
 extension DispatchQueue {
-    
     static func background(delay: Double = 0.0, background: (()->Void)? = nil, completion: (() -> Void)? = nil) {
         DispatchQueue.global(qos: .background).async {
             background?()
@@ -15,15 +14,9 @@ extension DispatchQueue {
                 })
             }
         }
-    }
-    
+    }  
 }
 
-
-/**
- * Please read the Capacitor iOS Plugin Development Guide
- * here: https://capacitor.ionicframework.com/docs/plugins/ios
- */
 @objc(CapacitorMusicControls)
 public class CapacitorMusicControls: CAPPlugin {
     
@@ -61,11 +54,11 @@ public class CapacitorMusicControls: CAPPlugin {
         let nowPlayingInfoCenter = MPNowPlayingInfoCenter.default();
         
         nowPlayingInfo = [
-            MPMediaItemPropertyArtist: self.musicControlsInfo.artist,
-            MPMediaItemPropertyTitle:self.musicControlsInfo.track,
-            MPMediaItemPropertyAlbumTitle:self.musicControlsInfo.album,
-            MPMediaItemPropertyPlaybackDuration:duration,
-            MPNowPlayingInfoPropertyElapsedPlaybackTime:elapsed,
+            MPMediaItemPropertyArtist: self.musicControlsInfo.artist ?? "",
+            MPMediaItemPropertyTitle:self.musicControlsInfo.track ?? "",
+            MPMediaItemPropertyAlbumTitle:self.musicControlsInfo.album ?? "",
+            MPMediaItemPropertyPlaybackDuration:duration ?? "",
+            MPNowPlayingInfoPropertyElapsedPlaybackTime:elapsed ?? 0,
             MPNowPlayingInfoPropertyPlaybackRate:playbackRate
         ]
         
@@ -142,31 +135,6 @@ public class CapacitorMusicControls: CAPPlugin {
         default:
             break
         }
-        //        guard let userInfo = notification.userInfo,
-        //                let reasonValue = userInfo[AVAudioSessionRouteChangeReasonKey] as? UInt,
-        //                let reason = AVAudioSession.RouteChangeReason(rawValue:reasonValue) else {
-        //                        return
-        //        }
-        //        switch reason {
-        //            case .newDeviceAvailable:
-        //                let session = AVAudioSession.sharedInstance()
-        //                for output in session.currentRoute.outputs where output.portType == AVAudioSession.Port.headphones {
-        //                    print("headphone plugged in")
-        //                    self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-headset-plugged" ])
-        //                    break
-        //                }
-        //            case .oldDeviceUnavailable:
-        //                if let previousRoute =
-        //                    userInfo[AVAudioSessionRouteChangePreviousRouteKey] as? AVAudioSessionRouteDescription {
-        //                    for output in previousRoute.outputs where output.portType == AVAudioSession.Port.headphones {
-        //                        print("headphone pulled out")
-        //                        self.notifyListeners("controlsNotification", data: [ "message" : "music-controls-headset-unplugged" ])
-        //                        break
-        //                    }
-        //                }
-        //                default: ()
-        //            }
-        
     }
     
     func remoteControlReceivedWithEvent(event: UIEvent?) {
@@ -229,11 +197,6 @@ public class CapacitorMusicControls: CAPPlugin {
             
         }
         else if (coverUri != "") {
-            //  print("coverImage empty");
-            
-            //            let baseCoverImagePath = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0];
-            //            let fullCoverImagePath = String(format:"%@%@", baseCoverImagePath, coverUri);
-            //
             let defaultManager = FileManager.default;
             
             let coverFilePath = "public/" + coverUri;
@@ -263,10 +226,14 @@ public class CapacitorMusicControls: CAPPlugin {
         
     }
     
-    func isCoverImageValid(inputImage: UIImage) -> Bool {
-        let cii = CIImage(image: inputImage);
+    func isCoverImageValid(inputImage: UIImage?) -> Bool {
         
-        return inputImage != nil && cii != nil;
+        if (inputImage != nil) {
+            let cii = CIImage(image: inputImage!);
+            
+            return inputImage != nil && cii != nil;
+        }
+        return false
     }
     
     func initAudioSession() {
@@ -430,4 +397,3 @@ public class CapacitorMusicControls: CAPPlugin {
     }
     
 }
-
