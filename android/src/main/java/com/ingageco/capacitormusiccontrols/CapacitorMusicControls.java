@@ -130,8 +130,10 @@ public class CapacitorMusicControls extends Plugin {
 				}
 			}
 
+			if (mediaSessionCompat != null) {
+				mediaSessionCompat.setMetadata(metadataBuilder.build());
+			}
 
-			mediaSessionCompat.setMetadata(metadataBuilder.build());
 
 			if (infos.isPlaying)
 				setMediaPlaybackState(PlaybackStateCompat.STATE_PLAYING, infos.elapsed);
@@ -153,6 +155,10 @@ public class CapacitorMusicControls extends Plugin {
 		mMessageReceiver = new MusicControlsBroadcastReceiver(this);
 		registerBroadcaster(mMessageReceiver);
 
+		if (mediaSessionCompat != null) {
+			mediaSessionCompat.release();
+		}
+
 		mediaSessionCompat = new MediaSessionCompat(context, "capacitor-music-controls-media-session", null,
 				mediaButtonPendingIntent);
 		mediaSessionCompat.setFlags(
@@ -173,7 +179,7 @@ public class CapacitorMusicControls extends Plugin {
 			mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
 			Intent headsetIntent = new Intent("music-controls-media-button");
 			mediaButtonPendingIntent = PendingIntent.getBroadcast(context, 0, headsetIntent,
-					PendingIntent.FLAG_UPDATE_CURRENT);
+					PendingIntent.FLAG_IMMUTABLE);
 			registerMediaButtonEvent();
 		} catch (Exception e) {
 			mediaButtonAccess = false;
@@ -339,7 +345,6 @@ public class CapacitorMusicControls extends Plugin {
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	@PluginMethod()

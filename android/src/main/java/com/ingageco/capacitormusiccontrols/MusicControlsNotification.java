@@ -108,7 +108,7 @@ public class MusicControlsNotification {
 		Log.i(TAG, "updateIsPlaying: isPlaying: " + isPlaying);
 
 
-		if (isPlaying == this.infos.isPlaying && this.hasNotification()) {
+		if (this.infos == null || (isPlaying == this.infos.isPlaying && this.hasNotification())) {
 			return;  // Not recreate the notification with the same data
 		}
 
@@ -254,7 +254,7 @@ public class MusicControlsNotification {
 		resultIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 		PendingIntent resultPendingIntent;
 		if (Build.VERSION.SDK_INT >= 31) {
-			resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_MUTABLE);
+			resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, PendingIntent.FLAG_IMMUTABLE);
 		} else {
 			resultPendingIntent = PendingIntent.getActivity(context, 0, resultIntent, 0);
 		}
@@ -268,7 +268,7 @@ public class MusicControlsNotification {
 			Intent optionsLikeIntent = new Intent("music-controls-liked");
 			PendingIntent previousPendingIntent;
 			if (Build.VERSION.SDK_INT >= 31) {
-				previousPendingIntent = PendingIntent.getBroadcast(context, 1, optionsLikeIntent, PendingIntent.FLAG_MUTABLE);
+				previousPendingIntent = PendingIntent.getBroadcast(context, 1, optionsLikeIntent, PendingIntent.FLAG_IMMUTABLE);
 			} else {
 				previousPendingIntent = PendingIntent.getBroadcast(context, 1, optionsLikeIntent, 0);
 			}
@@ -280,7 +280,7 @@ public class MusicControlsNotification {
 			Intent pauseIntent = new Intent("music-controls-pause");
 			PendingIntent pausePendingIntent;
 			if (Build.VERSION.SDK_INT >= 31) {
-				pausePendingIntent = PendingIntent.getBroadcast(context, 1, pauseIntent, PendingIntent.FLAG_MUTABLE);
+				pausePendingIntent = PendingIntent.getBroadcast(context, 1, pauseIntent, PendingIntent.FLAG_IMMUTABLE);
 			} else {
 				pausePendingIntent = PendingIntent.getBroadcast(context, 1, pauseIntent, 0);
 			}
@@ -290,7 +290,7 @@ public class MusicControlsNotification {
 			Intent playIntent = new Intent("music-controls-play");
 			PendingIntent playPendingIntent;
 			if (Build.VERSION.SDK_INT >= 31) {
-				playPendingIntent = PendingIntent.getBroadcast(context, 1, playIntent, PendingIntent.FLAG_MUTABLE);
+				playPendingIntent = PendingIntent.getBroadcast(context, 1, playIntent, PendingIntent.FLAG_IMMUTABLE);
 			} else {
 				playPendingIntent = PendingIntent.getBroadcast(context, 1, playIntent, 0);
 			}
@@ -301,7 +301,7 @@ public class MusicControlsNotification {
 			Intent nextIntent = new Intent("music-controls-next");
 			PendingIntent nextPendingIntent;
 			if (Build.VERSION.SDK_INT >= 31) {
-				nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, PendingIntent.FLAG_MUTABLE);
+				nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, PendingIntent.FLAG_IMMUTABLE);
 			} else {
 				nextPendingIntent = PendingIntent.getBroadcast(context, 1, nextIntent, 0);
 			}			
@@ -313,7 +313,7 @@ public class MusicControlsNotification {
 			Intent optionsDislikeIntent = new Intent("music-controls-dislike");
 			PendingIntent previousPendingIntent;
 			if (Build.VERSION.SDK_INT >= 31) {
-				previousPendingIntent = PendingIntent.getBroadcast(context, 1, optionsDislikeIntent, PendingIntent.FLAG_MUTABLE);
+				previousPendingIntent = PendingIntent.getBroadcast(context, 1, optionsDislikeIntent, PendingIntent.FLAG_IMMUTABLE);
 			} else {
 				previousPendingIntent = PendingIntent.getBroadcast(context, 1, optionsDislikeIntent, 0);
 			}
@@ -325,7 +325,7 @@ public class MusicControlsNotification {
 			Intent destroyIntent = new Intent("music-controls-destroy");
 			PendingIntent destroyPendingIntent;
 			if (Build.VERSION.SDK_INT >= 31) {
-				destroyPendingIntent = PendingIntent.getBroadcast(context, 1, destroyIntent, PendingIntent.FLAG_MUTABLE);
+				destroyPendingIntent = PendingIntent.getBroadcast(context, 1, destroyIntent, PendingIntent.FLAG_IMMUTABLE);
 			} else {
 				destroyPendingIntent = PendingIntent.getBroadcast(context, 1, destroyIntent, 0);
 			}			
